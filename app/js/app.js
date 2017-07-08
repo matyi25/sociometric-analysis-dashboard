@@ -1,7 +1,6 @@
 var sociometricAnalysisApp = angular.module('sociometricAnalysis', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages',
  'material.svgAssetsCache', 'ngCookies'])
-
-sociometricAnalysisApp.config(['$routeProvider',
+ .config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
 			when('/login', {
@@ -16,3 +15,7 @@ sociometricAnalysisApp.config(['$routeProvider',
 			});
 	}
 ]);
+
+/*sociometricAnalysisApp.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default').primaryPalette('indigo');
+})*/
