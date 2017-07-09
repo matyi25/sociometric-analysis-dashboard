@@ -1,4 +1,4 @@
-sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $mdSidenav, $mdToast) {
+sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, $mdSidenav, $mdToast) {
 	$scope.toggleSidenav = function(menu) {
 		$mdSidenav(menu).toggle();
 	}
@@ -16,6 +16,11 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $mdSidenav, 
 		if (idx > -1) list.splice(idx, 1);
 		else list.push(item);
 	};
+	$scope.loading = function () {
+		$rootScope.$broadcast("loadingEvent",true);
+	}
+
+
 	$scope.data = {
 		title: 'Dashboard',
 		toolbar: {

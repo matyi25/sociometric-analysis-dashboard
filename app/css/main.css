@@ -1,15 +1,8 @@
-.loginBox {
-  max-width:  90%;
-  width: 500px
+md-dialog {
+  height : 150px
 }
-
-.stretch input  {
-  width: 100%
-}
-
-#profilePic {
-  display: inline-block;
-  border-radius: 50%;
+md-progress-circular {
+  z-index: -1;
 }
 
 body {
@@ -21,6 +14,30 @@ md-whiteframe {
   background: #fff;
 }
 
+.loginBox {
+  max-width:  90%;
+  width: 500px
+}
+
+.stretch input  {
+  width: 100%
+}
+
 #content {
   padding: 24px;
+}
+
+#loading {
+	visibility: hidden
+}
+#loadingDialog {
+	height:300px !important;
+	overflow: hidden;
+	height: 80%;
+	text-align:center;
+}
+
+#profilePic {
+  display: inline-block;
+  border-radius: 50%;
 }
