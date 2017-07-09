@@ -1,10 +1,10 @@
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" role="sidenav" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
 	<md-toolbar class="md-tall md-hue-2" layout-align="end end">
 		<div class="md-toolbar-tools" layout layout-padding>
-			<md-icon>{{data.user.icon}}</md-icon>
+			<img ng-src="{{getUserInfo().imageUrl}}" class="img-responsive img-circle" alt="" id="profilePic">
 			<div layout="column" layout-padding>
-				<span class="md-body-2">{{data.user.name}}</span>
-				<span class="md-caption">{{data.user.email}}</span>
+				<span class="md-body-2">{{getUserInfo().name}}</span>
+				<span class="md-caption">{{getUserInfo().email}}</span>
 			</div>
 			<span flex></span>
 			<md-button class="md-icon-button" aria-label="User Settings" ng-click="toast('Logout')">
