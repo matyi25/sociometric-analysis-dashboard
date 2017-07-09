@@ -1,14 +1,15 @@
-sociometricAnalysisApp.controller('LoginCtrl', function ($scope, SociometricAnalysis) {
+sociometricAnalysisApp.controller('LoginCtrl', function ($scope, $rootScope, socialLoginService, SociometricAnalysis) {
 	$scope.username = "A";
 	$scope.password = "B";
 	
-	$scope.login = function() {
-		console.log("login")
-	}
+	$rootScope.$on('event:social-sign-in-success', function(event, userDetails){
+		console.log(userDetails)
+	})
 
-	$scope.close = function() {
+	$rootScope.$on('event:social-sign-out-success', function(event, logoutStatus){
 
-	}
+	})
 
+	//socialLoginService.logout()
 	
 });

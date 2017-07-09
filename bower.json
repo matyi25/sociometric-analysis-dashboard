@@ -15,7 +15,8 @@
     "angular-messages": "1.6.x",
     "angular-sanitize": "~1.x",
     "angular-material": "~1.x",
-    "bootstrap": "~3.x"
+    "bootstrap": "~3.x",
+    "angularjs-social-login": "^2.6.0"
   },
   "resolutions": {
     "angular-material": "~1.x",
