@@ -16,7 +16,8 @@
     "angular-sanitize": "~1.x",
     "angular-material": "~1.x",
     "bootstrap": "~3.x",
-    "angularjs-social-login": "^2.6.0"
+    "angularjs-social-login": "^2.6.0",
+    "lf-ng-md-file-input": "^1.5.2"
   },
   "resolutions": {
     "angular-material": "~1.x",

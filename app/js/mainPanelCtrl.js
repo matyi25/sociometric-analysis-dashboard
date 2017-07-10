@@ -20,6 +20,25 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 		$rootScope.$broadcast("loadingEvent",true);
 	}
 
+	$scope.onSubmit = function(){
+		var formData = new FormData();
+		angular.forEach($scope.files,function(obj){
+			if(!obj.isRemote){
+				formData.append('files[]', obj.lfFile);
+			}
+		});
+		console.log(formData);
+		/*
+		$http.post('./upload', formData, {
+			transformRequest: angular.identity,
+			headers: {'Content-Type': undefined}
+		}).then(function(result){
+			// do sometingh                   
+		},function(err){
+			// do sometingh
+		});*/
+	};
+
 
 	$scope.data = {
 		title: 'Dashboard',
