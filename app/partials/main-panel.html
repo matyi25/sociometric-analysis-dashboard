@@ -7,9 +7,6 @@
         </md-button>
         <h4 class="md-title">{{data.title}}</h4>
         <span flex></span>
-        <md-button class="md-icon-button" ng-repeat="button in data.toolbar.buttons" aria-label={{button.name}} ng-click="loading()">
-          <md-icon>{{button.icon}}</md-icon>
-        </md-button>
         <md-menu md-position-mode="target-right target" ng-repeat="menu in data.toolbar.menus">
           <md-button class="md-icon-button" aria-label="{{menu.name}}" ng-click="$mdOpenMenu($event)">
             <md-icon>{{menu.icon}}</md-icon>

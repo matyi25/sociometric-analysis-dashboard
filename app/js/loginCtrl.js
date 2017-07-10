@@ -10,10 +10,13 @@ sociometricAnalysisApp.controller('LoginCtrl', function ($scope, $rootScope, $ti
 	})
 
 	$rootScope.$on('event:social-sign-out-success', function(event, logoutStatus){
-		SociometricAnalysis.setIsLoggedIn(false);
-		SociometricAnalysis.setUserInfo({});
+		console.log(logoutStatus)
+		if(SociometricAnalysis.getIsLoggedIn()){
+			$rootScope.$broadcast("loadingEvent",false);
+        	SociometricAnalysis.setIsLoggedIn(false);
+			SociometricAnalysis.setUserInfo({});	
+        }
 	})
 
-	//socialLoginService.logout()
 	
 });

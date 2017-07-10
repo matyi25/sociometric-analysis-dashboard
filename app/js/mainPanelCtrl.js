@@ -24,11 +24,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 	$scope.data = {
 		title: 'Dashboard',
 		toolbar: {
-			buttons: [{
-				name: 'Button 1',
-				icon: 'add',
-				link: 'Button 1'
-			}],
 			menus: [{
 				name: 'Menu 1',
 				icon: 'message',
