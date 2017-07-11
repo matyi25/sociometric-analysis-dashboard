@@ -1,4 +1,5 @@
 sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, $mdSidenav, $mdToast) {
+	var activeContent = "default.html";
 	$scope.toggleSidenav = function(menu) {
 		$mdSidenav(menu).toggle();
 	}
@@ -10,7 +11,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 		var toast = $mdToast.simple().content('You clicked ' + message + ' having selected ' + $scope.selected.length + ' item(s)').position('bottom right');
 		$mdToast.show(toast);
 	};
-	$scope.selected = [];
 	$scope.toggle = function(item, list) {
 		var idx = list.indexOf(item);
 		if (idx > -1) list.splice(idx, 1);
@@ -19,6 +19,14 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 	$scope.loading = function () {
 		$rootScope.$broadcast("loadingEvent",true);
 	}
+
+	$scope.getInclude = function() {
+		return 'partials/'+ activeContent;
+	}
+
+	$rootScope.$on("activeContent",function(ev, content) {
+		activeContent = content;
+	});	
 
 	$scope.onSubmit = function(){
 		var formData = new FormData();
@@ -52,22 +60,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 					message: 'Action 1',
 					completed: true,
 					error: true
-				}, {
-					name: 'Action 2',
-					message: 'Action 2',
-					completed: false,
-					error: false
-				}, {
-					name: 'Action 3',
-					message: 'Action 3',
-					completed: true,
-					error: true
 				}]
 			}]
 		},
 		content: {
 			lists: [{
-				name: 'List 1',
+				name: 'Main Panel',
 				menu: {
 					name: 'Menu 1',
 					icon: 'settings',
@@ -78,20 +76,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 						completed: true,
 						error: true
 					}]
-				},
-				items: [{
-					name: 'Item 1',
-					description: 'Description 1',
-					link: 'Item 1'
-				}, {
-					name: 'Item 2',
-					description: 'Description 2',
-					link: 'Item 2'
-				}, {
-					name: 'Item 3',
-					description: 'Description 3',
-					link: 'Item 3'
-				}]
+				}
 			}]
 		}
 	}

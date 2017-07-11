@@ -45,16 +45,7 @@
             </md-menu>
           </div>
           <md-divider></md-divider>
-          <lf-ng-md-file-input lf-files="files" submit lf-on-submit-click="onSubmit()"></lf-ng-md-file-input>
-          <md-list-item class="md-2-line" ng-repeat="item in list.items">
-            <md-checkbox ng-click="toggle(item, selected)"></md-checkbox>
-            <md-content class="md-list-item-text" layout="column">
-              <h3 class="md-body-2">{{item.name}}</h3>
-              <p class="md-caption">{{item.description}}</p>
-            </md-content>
-            <span flex></span>
-            <md-icon aria-label="Show Item" ng-click="toast(item.link)">chevron_right</md-icon>
-          </md-list-item>
+          <div ng-include="getInclude()"></div>
         </md-list>
       </md-content>
     </section>

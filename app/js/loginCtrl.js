@@ -17,6 +17,4 @@ sociometricAnalysisApp.controller('LoginCtrl', function ($scope, $rootScope, $ti
 			SociometricAnalysis.setUserInfo({});	
         }
 	})
-
-	
 });

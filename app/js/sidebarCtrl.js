@@ -3,9 +3,10 @@ sociometricAnalysisApp.controller('SidebarCtrl', function ($scope, $mdSidenav, $
 		return SociometricAnalysis.getUserInfo();
   	}
 
-	$scope.toast = function(message) {
+	$scope.setActiveContent = function(message, activeContentHtml) {
 		var toast = $mdToast.simple().content('You clicked ' + message).position('bottom right');
 		$mdToast.show(toast);
+		$rootScope.$broadcast("activeContent",activeContentHtml);
 	};
 
 	$scope.logout = function() {
@@ -21,7 +22,7 @@ sociometricAnalysisApp.controller('SidebarCtrl', function ($scope, $mdSidenav, $
 		actions: [{
 		  name: 'Upload the data file',
 		  icon: 'settings',
-		  link: 'Action 1'
+		  link: 'upload.html'
 		}]
 	  }, {
 		name: 'Completed analysis processes',
@@ -29,7 +30,7 @@ sociometricAnalysisApp.controller('SidebarCtrl', function ($scope, $mdSidenav, $
 		actions: [{
 		  name: 'List available analysis processes',
 		  icon: 'settings',
-		  link: 'Action 3'
+		  link: 'browse.html'
 		}]
 	  }]
 	}
