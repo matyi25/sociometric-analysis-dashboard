@@ -1,4 +1,4 @@
-sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, $mdSidenav, $mdToast) {
+sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $rootScope, $mdSidenav, $mdToast, SociometricAnalysis) {
 	var activeContent = "default.html";
 	$scope.toggleSidenav = function(menu) {
 		$mdSidenav(menu).toggle();
@@ -28,23 +28,20 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $rootScope, 
 		activeContent = content;
 	});	
 
-	$scope.onSubmit = function(){
+	$scope.onSubmit = function(files){
 		var formData = new FormData();
-		angular.forEach($scope.files,function(obj){
-			if(!obj.isRemote){
-				formData.append('files[]', obj.lfFile);
-			}
-		});
-		console.log(formData);
-		/*
-		$http.post('./upload', formData, {
-			transformRequest: angular.identity,
-			headers: {'Content-Type': undefined}
-		}).then(function(result){
-			// do sometingh                   
-		},function(err){
-			// do sometingh
-		});*/
+		var uid = SociometricAnalysis.getUserInfo().uid;
+		if(!files[0].isRemote){
+			formData.append('files[]', files[0].lfFile);
+		}
+		$http.post('http://localhost:3000/upload/'+uid, formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+         }).then(function(result){
+                // do sometingh                   
+            },function(err){
+                // do sometingh
+        });
 	};
 
 

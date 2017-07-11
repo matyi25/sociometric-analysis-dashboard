@@ -1,6 +1,7 @@
 sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filter, $timeout, $q, $cookieStore) {
 	var isLoggedIn = false;
 	var userInfo = {};
+	var backendBaseUrl = "localhost:3000/"
 
 
 	this.getIsLoggedIn = function() {
@@ -18,6 +19,8 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 	this.setUserInfo = function(data) {
 		userInfo = data;
 	}
+
+	this.backendUploadFile = $resource(backendBaseUrl+"upload/:userId",{}, { update: { method: "POST", headers: { "Content-Type": undefined, transformRequest: angular.identity,}}});
 
 	return this;
 });
