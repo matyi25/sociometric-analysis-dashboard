@@ -1,5 +1,5 @@
 var sociometricAnalysisApp = angular.module('sociometricAnalysis', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages',
-  'ngCookies', 'socialLogin', 'lfNgMdFileInput'])
+  'ngCookies', 'socialLogin', 'lfNgMdFileInput', 'chart.js'])
  .config(['$routeProvider','$mdThemingProvider', 'socialProvider',
 	function($routeProvider, $mdThemingProvider, socialProvider) {
 		$routeProvider.
