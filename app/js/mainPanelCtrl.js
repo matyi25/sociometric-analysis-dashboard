@@ -1,4 +1,4 @@
-sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $rootScope, $mdSidenav, $mdToast, SociometricAnalysis) {
+sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $rootScope, $mdSidenav, $mdToast, socialLoginService, SociometricAnalysis) {
 	var activeContent = "default.html";
 
 	$scope.barLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
@@ -15,6 +15,24 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $root
         }
 	};
 
+	$scope.getUserInfo = function() {
+		return SociometricAnalysis.getUserInfo();
+  	}
+
+  	$scope.onMenuClick = function(link) {
+		if(link=='logout') {
+			logout();
+		}
+		else {
+			activeContent = link;
+		}
+  	}
+
+	var logout = function() {
+		$rootScope.$broadcast("loadingEvent",true);
+		socialLoginService.logout();
+		$location.path('/login');
+	}
 
 	$scope.toggleSidenav = function(menu) {
 		$mdSidenav(menu).toggle();
@@ -40,10 +58,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $root
 		return 'partials/'+ activeContent;
 	}
 
-	$rootScope.$on("activeContent",function(ev, content) {
-		activeContent = content;
-	});	
-
 	$scope.onSubmit = function(files){
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
@@ -62,15 +76,24 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $root
 
 
 	$scope.data = {
-		title: 'Dashboard',
 		toolbar: {
 			menus: [{
-				name: 'Menu 1',
+				name: 'Menu',
 				icon: 'message',
 				width: '4',
 				actions: [{
-					name: 'Action 1',
-					message: 'Action 1',
+					name: 'Start new analysis process',
+					link: 'upload.html',
+					completed: true,
+					error: true
+				}, {
+					name: 'Browse old analysis processes',
+					link: 'browse.html',
+					completed: true,
+					error: true
+				}, {
+					name: 'Logout',
+					link: 'logout',
 					completed: true,
 					error: true
 				}]
@@ -78,7 +101,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $root
 		},
 		content: {
 			lists: [{
-				name: 'Main Panel',
+				name: 'Dashboard',
 				menu: {
 					name: 'Menu 1',
 					icon: 'settings',
