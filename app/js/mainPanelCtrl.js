@@ -9,6 +9,11 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $root
     	[28, 48, 40, 19, 86, 27, 90]
   	];
 
+  	$scope.barOptions = {
+        legend: {
+            display: true
+        }
+	};
 
 
 	$scope.toggleSidenav = function(menu) {
