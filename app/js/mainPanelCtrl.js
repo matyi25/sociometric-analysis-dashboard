@@ -50,8 +50,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		if (idx > -1) list.splice(idx, 1);
 		else list.push(item);
 	};
-	$scope.loading = function () {
-		$rootScope.$broadcast("loadingEvent",true);
+	$scope.loading = function (condition) {
+		$rootScope.$broadcast("loadingEvent",condition);
 	}
 
 	$scope.getInclude = function() {
@@ -59,6 +59,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 
 	$scope.onSubmit = function(files){
+		$scope.loading(true)
+
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
 		if(!files[0].isRemote){
@@ -67,10 +69,15 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		$http.post('http://localhost:3000/upload/'+uid, formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
-         }).then(function(result){
-                // do sometingh                   
+         }).then(function(result) {
+         		$scope.loading(false)
+                if(result.status == 200) {
+                	console.log("Correct");
+                } else {
+                	console.log("Not correct");
+                }                   
             },function(err){
-                // do sometingh
+                console.log("Unable to contact backend");
         });
 	};
 

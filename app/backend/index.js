@@ -2,6 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var cors = require("cors");
 var multer = require('multer');
+var exec = require("child_process").exec;
 var MongoClient = require("mongodb").MongoClient;
 
 var app = express();
@@ -10,6 +11,9 @@ app.use(cors());
 app.use(express.static(__dirname + '/upload'));
 
 var db;
+
+var IM_DATA_FILENAME = "im_data.txt";
+var dataCheckerScript = "python " + __dirname + "\\check_data.py";
 
 MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, database) {
 	if (err) return console.log(err);
@@ -26,7 +30,7 @@ var storage = multer.diskStorage({
 		//modify upload dest
 	},
 	filename: function (req, file, cb) {
-		cb(null, file.originalname);
+		cb(null, IM_DATA_FILENAME);
 		//modify file name
 	}
 });
@@ -34,7 +38,15 @@ var upload = multer({ "storage": storage });
 var type = upload.array('files[]');
 
 app.post('/upload/:userId',type,function(req,res){
-	res.sendStatus(200);
+	exec(dataCheckerScript + "", function(error, stdout, stderr) {
+	  	if (!error) {
+	  		console.log("Ok");
+	    	res.sendStatus(200);
+	  	} else {
+	  		console.log("NOk");
+	    	res.sendStatus(201);
+	  	}
+	});
 });
 
 
