@@ -15,6 +15,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
         }
 	};
 
+	var inputDataInfo = undefined;
+
 	$scope.getUserInfo = function() {
 		return SociometricAnalysis.getUserInfo();
   	}
@@ -72,6 +74,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
          }).then(function(result) {
          		$scope.loading(false)
                 if(result.status == 200) {
+                	inputDataInfo = result.data;
+                	console.log(inputDataInfo);
                 	console.log("Correct");
                 } else {
                 	console.log("Not correct");

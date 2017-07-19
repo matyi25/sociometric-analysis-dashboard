@@ -40,10 +40,9 @@ var type = upload.array('files[]');
 app.post('/upload/:userId',type,function(req,res){
 	exec(dataCheckerScript + "", function(error, stdout, stderr) {
 	  	if (!error) {
-	  		console.log("Ok");
-	    	res.sendStatus(200);
+	  		res.status(200);
+	  		res.json(JSON.parse(stdout));
 	  	} else {
-	  		console.log("NOk");
 	    	res.sendStatus(201);
 	  	}
 	});
