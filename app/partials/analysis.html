@@ -1,1 +1,14 @@
-<p>Channels</p>
+<md-content role="navigation">
+	<md-list ng-repeat="section in data.analysis.sections">
+		<md-list-item ng-click="section.expand = !section.expand">
+			<p class="md-subheader md-primary">{{section.name}}</p>
+			<span flex></span>
+			<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+		</md-list-item>
+		<md-list-item ng-show="section.expand" ng-repeat="action in section.actions" ng-click="">
+			<md-icon>assessment</md-icon>
+			<p class="md-body-2">{{action}}</p>
+			<span flex></span>
+			<md-icon>chevron_right</md-icon>
+		</md-list-item>
+</md-content>

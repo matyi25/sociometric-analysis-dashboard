@@ -2,31 +2,31 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeContent = "default.html";
 
 	$scope.barLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  	$scope.barSeries = ['Series A', 'Series B'];
+	$scope.barSeries = ['Series A', 'Series B'];
 
-  	$scope.barData = [
-    	[65, 59, 80, 81, 56, 55, 40],
-    	[28, 48, 40, 19, 86, 27, 90]
-  	];
+	$scope.barData = [
+		[65, 59, 80, 81, 56, 55, 40],
+		[28, 48, 40, 19, 86, 27, 90]
+	];
 
-  	$scope.barOptions = {
-        legend: {
-            display: true
-        }
+	$scope.barOptions = {
+		legend: {
+			display: true
+		}
 	};
 
 	$scope.getUserInfo = function() {
 		return SociometricAnalysis.getUserInfo();
-  	}
+	}
 
-  	$scope.onMenuClick = function(link) {
+	$scope.onMenuClick = function(link) {
 		if(link=='logout') {
 			logout();
 		}
 		else {
 			activeContent = link;
 		}
-  	}
+	}
 
 	var logout = function() {
 		$rootScope.$broadcast("loadingEvent",true);
@@ -68,16 +68,21 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			formData.append('files[]', files[0].lfFile);
 		}
 		$http.post('http://localhost:3000/upload/'+uid, formData, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-        }).then(function(result) {
-         		$scope.loading(false)
-                if(result.status == 200) {
-                	console.log(result.data);
-                	SociometricAnalysis.setInputDataInfo(result.data);
-                	activeContent = "analysis.html";
-                } else {
-                	$mdDialog.show(
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+		}).then(function(result) {
+				$scope.loading(false)
+				if(result.status == 200) {
+					$scope.data.analysis.sections.forEach(function cb(element, index, array) {
+						switch(element.id){
+							case 0: element.actions = result.data.channels; break;
+							case 1: element.actions = result.data.users; break;
+						}
+					});
+					SociometricAnalysis.setInputDataInfo(result.data);
+					activeContent = "analysis.html";
+				} else {
+					$mdDialog.show(
 						$mdDialog.alert()
 							.parent(angular.element(document.querySelector("#general-view")))
 							.clickOutsideToClose(true)
@@ -86,9 +91,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 							.ariaLabel("Alert")
 							.ok("Got it!")
 					);
-                }                   
-            }, function(err) {
-                	$mdDialog.show(
+				}                   
+			}, function(err) {
+					$mdDialog.show(
 						$mdDialog.alert()
 							.parent(angular.element(document.querySelector("#general-view")))
 							.clickOutsideToClose(true)
@@ -97,8 +102,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 							.ariaLabel("Alert")
 							.ok("Got it!")
 				);
-        	}
-        );
+			}
+		);
 	};
 
 
@@ -111,20 +116,30 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				actions: [{
 					name: 'Start new analysis process',
 					link: 'upload.html',
-					completed: true,
-					error: true
+					icon: 'create'
 				}, {
 					name: 'Browse old analysis processes',
 					link: 'browse.html',
-					completed: true,
-					error: true
+					icon: 'filter_list'
 				}, {
 					name: 'Logout',
 					link: 'logout',
-					completed: true,
-					error: true
+					icon: 'power_settings_new'
 				}]
 			}]
+		}, 
+		analysis: {
+		  sections: [{
+			name: 'Channels',
+			id: 0,
+			expand: false,
+			actions: undefined
+		  }, {
+			name: 'Users',
+			id: 1,
+			expand: false,
+			actions: undefined
+		  }]
 		},
 		content: {
 			lists: [{

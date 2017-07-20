@@ -19,7 +19,7 @@
             <md-subheader>{{menu.name}}</md-subheader>
             <md-menu-item ng-repeat="action in menu.actions">
               <md-button layout-fill md-ink-ripple ng-click="onMenuClick(action.link)">
-                <md-icon md-class="{{action.error ? 'md-warn' : 'md-primary'}}" md-menu-align-target>{{action.completed ? 'done' : 'hourglass_empty'}}</md-icon>
+                <md-icon md-menu-align-target>{{action.icon}}</md-icon>
                 {{action.name}}
               </md-button>
             </md-menu-item>
