@@ -1,4 +1,4 @@
-sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $rootScope, $mdSidenav, $mdToast, socialLoginService, SociometricAnalysis) {
+sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $rootScope, $mdSidenav, $mdToast, $mdDialog, socialLoginService, SociometricAnalysis) {
 	var activeContent = "default.html";
 
 	$scope.barLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
@@ -14,8 +14,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
             display: true
         }
 	};
-
-	var inputDataInfo = undefined;
 
 	$scope.getUserInfo = function() {
 		return SociometricAnalysis.getUserInfo();
@@ -60,29 +58,47 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		return 'partials/'+ activeContent;
 	}
 
-	$scope.onSubmit = function(files){
-		$scope.loading(true)
+	$scope.onSubmit = function(files)	{
+		$scope.loading(true);
 
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
+
 		if(!files[0].isRemote){
 			formData.append('files[]', files[0].lfFile);
 		}
 		$http.post('http://localhost:3000/upload/'+uid, formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
-         }).then(function(result) {
+        }).then(function(result) {
          		$scope.loading(false)
                 if(result.status == 200) {
-                	inputDataInfo = result.data;
-                	console.log(inputDataInfo);
-                	console.log("Correct");
+                	console.log(result.data);
+                	SociometricAnalysis.setInputDataInfo(result.data);
+                	activeContent = "analysis.html";
                 } else {
-                	console.log("Not correct");
+                	$mdDialog.show(
+						$mdDialog.alert()
+							.parent(angular.element(document.querySelector("#general-view")))
+							.clickOutsideToClose(true)
+							.title("ERROR WHILE UPLOADING")
+							.textContent("Wrong input data format. Check the documentation for correct format and try reuploading correct file format.")
+							.ariaLabel("Alert")
+							.ok("Got it!")
+					);
                 }                   
-            },function(err){
-                console.log("Unable to contact backend");
-        });
+            }, function(err) {
+                	$mdDialog.show(
+						$mdDialog.alert()
+							.parent(angular.element(document.querySelector("#general-view")))
+							.clickOutsideToClose(true)
+							.title("ERROR WHILE UPLOADING")
+							.textContent("There has been an error while uploading the file, try again later: " + err.toString())
+							.ariaLabel("Alert")
+							.ok("Got it!")
+				);
+        	}
+        );
 	};
 
 

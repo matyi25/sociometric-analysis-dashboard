@@ -15,15 +15,6 @@ var db;
 var IM_DATA_FILENAME = "im_data.txt";
 var dataCheckerScript = "python " + __dirname + "\\check_data.py";
 
-MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, database) {
-	if (err) return console.log(err);
-	db = database;
-
-	app.listen(3000, function() {
-		console.log("Listening on 3000");
-	})
-})
-
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, __dirname +'/public/uploads');
@@ -36,6 +27,16 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ "storage": storage });
 var type = upload.array('files[]');
+
+
+MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, database) {
+	if (err) return console.log(err);
+	db = database;
+
+	app.listen(3000, function() {
+		console.log("Listening on 3000");
+	})
+});
 
 app.post('/upload/:userId',type,function(req,res){
 	exec(dataCheckerScript + "", function(error, stdout, stderr) {
