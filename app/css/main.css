@@ -6,7 +6,7 @@ md-progress-circular {
 }
 
 body {
-  overflow: hidden;
+  overflow-y: scroll;
   background-color: #EEEEEE;
 }
 
@@ -35,6 +35,13 @@ md-whiteframe {
 	overflow: hidden;
 	height: 80%;
 	text-align:center;
+}
+
+#chartPanel {
+  width: 50%; 
+  margin: 0 auto;
+  height:400px !important;
+  width: 800px;
 }
 
 #profilePic {

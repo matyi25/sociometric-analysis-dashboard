@@ -5,7 +5,7 @@
 			<span flex></span>
 			<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 		</md-list-item>
-		<md-list-item ng-show="section.expand" ng-repeat="action in section.actions" ng-click="getAnalysis(section.id)">
+		<md-list-item ng-show="section.expand" ng-repeat="action in section.actions" ng-click="getAnalysis(section.id, action)">
 			<md-icon>assessment</md-icon>
 			<p class="md-body-2">{{action}}</p>
 			<span flex></span>

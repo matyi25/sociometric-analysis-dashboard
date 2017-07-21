@@ -3,6 +3,7 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 	var userInfo = {};
 	var backendBaseUrl = "http://localhost:3000/";
 	var inputDataInfo = {};
+	var channelsData = {};
 
 
 	this.getIsLoggedIn = function() {
@@ -27,6 +28,14 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 
 	this.setInputDataInfo = function(data) {
 		inputDataInfo = data;
+	}
+
+	this.setChannelsData = function(data) {
+		channelsData = data;
+	}
+
+	this.getChannelsData = function() {
+		return channelsData;
 	}
 
 	this.backendGetChannels = $resource(backendBaseUrl+"channels");

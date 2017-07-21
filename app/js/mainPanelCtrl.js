@@ -1,13 +1,8 @@
 sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $rootScope, $mdSidenav, $mdToast, $mdDialog, socialLoginService, SociometricAnalysis) {
 	var activeContent = "default.html";
-
-	$scope.barLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-	$scope.barSeries = ['Series A', 'Series B'];
-
-	$scope.barData = [
-		[65, 59, 80, 81, 56, 55, 40],
-		[28, 48, 40, 19, 86, 27, 90]
-	];
+	var activeChartId = undefined;
+	$scope.activeChartKey = undefined;
+	$scope.activeChartData = 
 
 	$scope.barOptions = {
 		legend: {
@@ -58,9 +53,15 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		return 'partials/'+ activeContent;
 	}
 
-	$scope.getAnalysis = function(id) {
+	$scope.getAnalysis = function(id, key) {
+		$scope.loading(true);
+		activeChartId = id;
+		$scope.activeChartKey = key;
+		activeContent = 'chart.html';
 		SociometricAnalysis.backendGetChannels.get(function(data) {
-			console.log(data);
+			SociometricAnalysis.setChannelsData(data);
+			$scope.activeChartData = data[$scope.activeChartKey];
+			$scope.loading(false);
 		})
 	}
 
