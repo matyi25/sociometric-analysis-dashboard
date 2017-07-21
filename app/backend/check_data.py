@@ -7,12 +7,11 @@ import json
 """
     Data format: channel(id) ,originating(u_id), terminating(u_id), ts(real), type(message/file_share) edited(binomial), edited_by(u_id), edit_ts(real), attachment(binomial)
 """
-IM_DATA_FILENAME = "im_data.txt"
 headers = ["channel","originating", "terminating", "ts", "type", "edited", "edited_by", "edit_ts", "attachment"]
 
 
-def read_stored_df():
-    return pandas.DataFrame(json.load(open("C:\\sociometric-analysis-dashboard\\app\\backend\\public\\uploads\\"+IM_DATA_FILENAME)),columns=headers)
+def read_stored_df(path):
+    return pandas.DataFrame(json.load(open(path)),columns=headers)
 
 def get_channels(df):
     return list(df.channel.unique())
@@ -22,10 +21,10 @@ def get_users(df):
     term_list = list(df.terminating)
     return [x for x in set(orig_list + term_list) if x != '']
 
-def main():
+def main(args):
     try:
         data = {}
-        im_data_df = read_stored_df()
+        im_data_df = read_stored_df(args[1])
         data["channels"] = get_channels(im_data_df)
         data["users"] = get_users(im_data_df)
         print(json.dumps(data))
@@ -35,4 +34,4 @@ def main():
         sys.exit(-1)
     
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

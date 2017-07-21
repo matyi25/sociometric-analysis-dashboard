@@ -12,12 +12,14 @@ app.use(express.static(__dirname + '/upload'));
 
 var db;
 
+var UPLOAD_PATH = "\\public\\uploads\\";
 var IM_DATA_FILENAME = "im_data.txt";
-var dataCheckerScript = "python " + __dirname + "\\check_data.py";
+var dataCheckerScript = "python " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME;
+console.log(dataCheckerScript);
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, __dirname +'/public/uploads');
+		cb(null, __dirname + UPLOAD_PATH);
 		//modify upload dest
 	},
 	filename: function (req, file, cb) {
@@ -39,7 +41,7 @@ MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082
 });
 
 app.post('/upload/:userId',type,function(req,res){
-	exec(dataCheckerScript + "", function(error, stdout, stderr) {
+	exec(dataCheckerScript, function(error, stdout, stderr) {
 	  	if (!error) {
 	  		res.status(200);
 	  		res.json(JSON.parse(stdout));
