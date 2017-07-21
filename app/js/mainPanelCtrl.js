@@ -58,6 +58,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		return 'partials/'+ activeContent;
 	}
 
+	$scope.getAnalysis = function(id) {
+		SociometricAnalysis.backendGetChannels.get(function(data) {
+			console.log(data);
+		})
+	}
+
 	$scope.onSubmit = function(files)	{
 		$scope.loading(true);
 

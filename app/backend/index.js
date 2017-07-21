@@ -15,7 +15,7 @@ var db;
 var UPLOAD_PATH = "\\public\\uploads\\";
 var IM_DATA_FILENAME = "im_data.txt";
 var dataCheckerScript = "python " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME;
-console.log(dataCheckerScript);
+var channelAnalysisScript = "python " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME;
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -50,5 +50,17 @@ app.post('/upload/:userId',type,function(req,res){
 	  	}
 	});
 });
+
+app.get('/channels', function(req,res){
+	exec(channelAnalysisScript, function(error, stdout, stderr) {
+	  	if (!error) {
+	  		res.status(200);
+	  		res.json(JSON.parse(stdout));
+	  	} else {
+	    	res.sendStatus(201);
+	  	}
+	});
+});
+
 
 

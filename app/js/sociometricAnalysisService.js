@@ -1,7 +1,7 @@
 sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filter, $timeout, $q, $cookieStore) {
 	var isLoggedIn = false;
 	var userInfo = {};
-	var backendBaseUrl = "localhost:3000/";
+	var backendBaseUrl = "http://localhost:3000/";
 	var inputDataInfo = {};
 
 
@@ -29,7 +29,7 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 		inputDataInfo = data;
 	}
 
-	this.backendUploadFile = $resource(backendBaseUrl+"upload/:userId",{}, { update: { method: "POST", headers: { "Content-Type": undefined, transformRequest: angular.identity,}}});
+	this.backendGetChannels = $resource(backendBaseUrl+"channels");
 
 	return this;
 });
