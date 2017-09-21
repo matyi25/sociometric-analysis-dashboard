@@ -1,14 +1,25 @@
 sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $rootScope, $mdSidenav, $mdToast, $mdDialog, socialLoginService, SociometricAnalysis) {
 	var activeContent = "default.html";
 	var activeChartId = undefined;
-	$scope.activeChartKey = undefined;
-	$scope.activeChartData = {};
 
-	$scope.barOptions = {
+	$scope.channelAnalysisData = [];
+	$scope.channelAnalysisLabels = [];
+	$scope.channelAnalysisName = [];
+	$scope.channelAnalysisOptions = {
 		legend: {
 			display: true
-		}
+		},
+		title: {
+            display: true,
+            text: 'Channel analysis'
+        }
 	};
+
+	var logout = function() {
+		$rootScope.$broadcast("loadingEvent",true);
+		socialLoginService.logout();
+		$location.path('/login');
+	}
 
 	$scope.getUserInfo = function() {
 		return SociometricAnalysis.getUserInfo();
@@ -21,12 +32,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		else {
 			activeContent = link+".html";
 		}
-	}
-
-	var logout = function() {
-		$rootScope.$broadcast("loadingEvent",true);
-		socialLoginService.logout();
-		$location.path('/login');
 	}
 
 	$scope.toggleSidenav = function(menu) {
@@ -42,20 +47,33 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 
 	$scope.getAnalysis = function(id, key) {
-		$scope.loading(true);
-		activeChartId = id;
-		$scope.activeChartKey = key;
-		console.log(key);
-		activeContent = 'chart.html';
-		SociometricAnalysis.backendGetChannels.get(function(data) {
-			SociometricAnalysis.setChannelsData(data);
-			$scope.activeChartData = data[$scope.activeChartKey];
-			$scope.loading(false);
-		})
+		if(id == 0) {
+			activeContent = 'channel-analysis.html';
+			if($scope.channelAnalysisData.length == 0 && $scope.channelAnalysisLabels.length == 0 && $scope.channelAnalysisName.length == 0) {
+				$scope.loading(true);
+				SociometricAnalysis.backendGetChannels.get(function(data) {
+					SociometricAnalysis.setChannelsData(data);
+
+					$scope.channelAnalysisLabels = data[key]['x'];
+					$scope.channelAnalysisData = [data[key]['y']];
+					$scope.channelAnalysisName = [key];
+					$scope.loading(false);
+				})
+			}
+			else {
+				$scope.channelAnalysisLabels = SociometricAnalysis.getChannelsData()[key]['x'];
+				$scope.channelAnalysisData = [SociometricAnalysis.getChannelsData()[key]['y']];
+				$scope.channelAnalysisName = [key];
+			}
+		}
 	}
 
 	$scope.onSubmit = function(files)	{
 		$scope.loading(true);
+
+		$scope.channelAnalysisData = [];
+		$scope.channelAnalysisLabels = [];
+		$scope.channelAnalysisName = [];
 
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
