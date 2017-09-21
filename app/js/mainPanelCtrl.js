@@ -2,7 +2,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 	$scope.activeChartKey = undefined;
-	$scope.activeChartData = 
+	$scope.activeChartData = {};
 
 	$scope.barOptions = {
 		legend: {
@@ -115,12 +115,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 
 	$scope.data = {
-		toolbar: {
-			menus: [{
-				name: 'Menu',
-				icon: 'message',
-				width: '4',
-				actions: [{
+		mainMenu: [{
 					name: 'Start new analysis process',
 					link: 'upload.html',
 					icon: 'create'
@@ -132,9 +127,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 					name: 'Logout',
 					link: 'logout',
 					icon: 'power_settings_new'
-				}]
-			}]
-		}, 
+				}],
 		analysis: {
 		  sections: [{
 			name: 'Channels',
