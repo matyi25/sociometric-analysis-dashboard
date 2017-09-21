@@ -32,15 +32,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.toggleSidenav = function(menu) {
 		$mdSidenav(menu).toggle();
 	}
-	$scope.toast = function(message) {
-		var toast = $mdToast.simple().content('You clicked ' + message).position('bottom right');
-		$mdToast.show(toast);
-	};
-	$scope.toggle = function(item, list) {
-		var idx = list.indexOf(item);
-		if (idx > -1) list.splice(idx, 1);
-		else list.push(item);
-	};
+
 	$scope.loading = function (condition) {
 		$rootScope.$broadcast("loadingEvent",condition);
 	}
