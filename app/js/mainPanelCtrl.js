@@ -19,7 +19,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			logout();
 		}
 		else {
-			activeContent = link;
+			activeContent = link+".html";
 		}
 	}
 
@@ -34,10 +34,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 	$scope.toast = function(message) {
 		var toast = $mdToast.simple().content('You clicked ' + message).position('bottom right');
-		$mdToast.show(toast);
-	};
-	$scope.toastList = function(message) {
-		var toast = $mdToast.simple().content('You clicked ' + message + ' having selected ' + $scope.selected.length + ' item(s)').position('bottom right');
 		$mdToast.show(toast);
 	};
 	$scope.toggle = function(item, list) {
@@ -57,6 +53,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		$scope.loading(true);
 		activeChartId = id;
 		$scope.activeChartKey = key;
+		console.log(key);
 		activeContent = 'chart.html';
 		SociometricAnalysis.backendGetChannels.get(function(data) {
 			SociometricAnalysis.setChannelsData(data);
@@ -80,7 +77,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		}).then(function(result) {
 				$scope.loading(false)
 				if(result.status == 200) {
-					$scope.data.analysis.sections.forEach(function cb(element, index, array) {
+					$scope.data.dataMenu.forEach(function cb(element, index, array) {
 						switch(element.id){
 							case 0: element.actions = result.data.channels; break;
 							case 1: element.actions = result.data.users; break;
@@ -113,23 +110,21 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		);
 	};
 
-
 	$scope.data = {
 		mainMenu: [{
-					name: 'Start new analysis process',
-					link: 'upload.html',
-					icon: 'create'
-				}, {
-					name: 'Browse old analysis processes',
-					link: 'browse.html',
-					icon: 'filter_list'
-				}, {
-					name: 'Logout',
-					link: 'logout',
-					icon: 'power_settings_new'
-				}],
-		analysis: {
-		  sections: [{
+			name: 'Start new analysis process',
+			link: 'upload',
+			icon: 'create'
+		}, {
+			name: 'Browse old analysis processes',
+			link: 'browse',
+			icon: 'filter_list'
+		}, {
+			name: 'Logout',
+			link: 'logout',
+			icon: 'power_settings_new'
+		}],
+		dataMenu: [{
 			name: 'Channels',
 			id: 0,
 			expand: false,
@@ -139,23 +134,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			id: 1,
 			expand: false,
 			actions: undefined
-		  }]
-		},
-		content: {
-			lists: [{
-				name: 'Dashboard',
-				menu: {
-					name: 'Menu 1',
-					icon: 'settings',
-					width: '4',
-					actions: [{
-						name: 'Action 1',
-						message: 'Action 1',
-						completed: true,
-						error: true
-					}]
-				}
-			}]
-		}
+		}],
+		analysisMenu: [{
+			name: 'Back',
+			message: 'Back',
+			icon: 'undo',
+			link: 'analysis'
+		}]
 	}
 });

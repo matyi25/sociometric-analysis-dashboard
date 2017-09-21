@@ -12,11 +12,11 @@
         </div>
         <span flex></span>
         <md-menu md-position-mode="target-right target">
-          <md-button class="md-icon-button" aria-label="Menu" ng-click="$mdMenu.open($event)">
+          <md-button class="md-icon-button" aria-label="Main menu" ng-click="$mdMenu.open($event)">
             <md-icon>message</md-icon>
           </md-button>
           <md-menu-content width=4>
-            <md-subheader>Menu</md-subheader>
+            <md-subheader>Main menu</md-subheader>
             <md-menu-item ng-repeat="action in data.mainMenu">
               <md-button layout-fill md-ink-ripple ng-click="onMenuClick(action.link)">
                 <md-icon md-menu-align-target>{{action.icon}}</md-icon>
@@ -29,19 +29,19 @@
     </md-toolbar>
     <section id="content" role="content" layout="column" layout-padding md-scroll-y>
       <md-content class="md-whiteframe-z2" ng-cloak>
-        <md-list ng-repeat="list in data.content.lists">
+        <md-list>
           <div class="md-actions" layout layout-align="end center">
-            <md-subheader class="md-no-sticky md-primary">{{list.name}}</md-subheader>
+            <md-subheader class="md-no-sticky md-primary">Dashboard</md-subheader>
             <span flex></span>
             <md-menu md-position-mode="target-right target">
-              <md-button class="md-icon-button" aria-label="{{list.menu.name}}" ng-click="$mdMenu.open($event)">
+              <md-button class="md-icon-button" aria-label="Analysis Menu" ng-click="$mdMenu.open($event)">
                 <md-icon class="md-primary">settings</md-icon>
               </md-button>
-              <md-menu-content width={{list.menu.width}}>
-                <md-subheader>{{list.menu.name}}</md-subheader>
-                <md-menu-item ng-repeat="action in list.menu.actions">
-                  <md-button layout-fill md-ink-ripple ng-click="toastList(action.message)">
-                    <md-icon md-class="{{action.error ? 'md-warn' : 'md-primary'}}" md-menu-align-target>{{action.completed ? 'done' : 'hourglass_empty'}}</md-icon>
+              <md-menu-content width=4>
+                <md-subheader>Analysis menu</md-subheader>
+                <md-menu-item ng-repeat="action in data.analysisMenu">
+                  <md-button layout-fill md-ink-ripple ng-click="onMenuClick(action.link)">
+                    <md-icon md-menu-align-target>{{action.icon}}</md-icon>
                     {{action.name}}
                   </md-button>
                 </md-menu-item>
