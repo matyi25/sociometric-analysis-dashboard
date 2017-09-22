@@ -19,6 +19,15 @@ md-whiteframe {
   width: 500px
 }
 
+.png-icon{
+    margin: 5px auto auto;
+    padding: 0;
+    display: inline-block;
+    background-repeat: no-repeat no-repeat;
+    pointer-events: none;
+    max-width:100%;
+}
+
 .stretch input  {
   width: 100%
 }
