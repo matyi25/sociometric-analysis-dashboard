@@ -13,13 +13,16 @@ def channel_analysis(im_data_df):
     #print groupby_data["ts"].max()
     #print "Channel analysis \n"
     channel_msgs_day = groupby_data["ts"].aggregate(util.aggregate_days)
+    channel_users = groupby_data.first()
     #print channel_msgs_day
     #print "\n"
     
     output_data = {}
     channels = channel_msgs_day.index.tolist()
     for i in xrange(len(channels)):
-        output_data[channels[i]] = {"x": DAYS, "y": channel_msgs_day[i][1:]}
+        temp = channel_users.loc[channels[i]]
+        users = [temp["originating"],temp["terminating"]]
+        output_data[channels[i]] = {"x": DAYS, "y": channel_msgs_day[i][1:], "users": users}
         #util.plot_bar(DAY_VAL, DAYS, channel_msgs_day[i][1:], None, channels[i]+" channel messages per day", 
         #          "", "Message count", "plot_"+channels[i]+"_days.png", True, False)
     print(json.dumps(output_data))

@@ -56,14 +56,14 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 					$scope.channelAnalysisLabels = data[key]['x'];
 					$scope.channelAnalysisData = [data[key]['y']];
-					$scope.channelAnalysisName = [key];
+					$scope.channelAnalysisName = [key + " - " + data[key]['users'] + ' users'];
 					$scope.loading(false);
 				})
 			}
 			else {
 				$scope.channelAnalysisLabels = SociometricAnalysis.getChannelsData()[key]['x'];
 				$scope.channelAnalysisData = [SociometricAnalysis.getChannelsData()[key]['y']];
-				$scope.channelAnalysisName = [key];
+				$scope.channelAnalysisName = [key + " - " + SociometricAnalysis.getChannelsData()[key]['users'] + ' users'];
 			}
 		}
 	}
