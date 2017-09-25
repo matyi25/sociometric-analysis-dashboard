@@ -2,6 +2,27 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 
+	// move to different controller
+    $scope.userAnalysisData = {
+        nodes: new vis.DataSet(),
+        edges: new vis.DataSet()
+    };
+    $scope.userAnalysisOptions = {
+
+    };
+
+    $scope.userAnalysisData.nodes.add([
+        {id: 1, label: 'Node 1'},
+        {id: 2, label: 'Node 2'},
+        {id: 3, label: 'Node 3'},
+        {id: 4, label: 'Node 4'},
+        {id: 5, label: 'Node 5'}]);
+
+    $scope.userAnalysisData.edges.add([
+        {id: 1, from: 1, to: 2},
+        {id: 2, from: 3, to: 2}
+    ]);
+
 	$scope.channelAnalysisData = [];
 	$scope.channelAnalysisLabels = [];
 	$scope.channelAnalysisName = [];
@@ -65,6 +86,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				$scope.channelAnalysisData = [SociometricAnalysis.getChannelsData()[key]['y']];
 				$scope.channelAnalysisName = [key + " - " + SociometricAnalysis.getChannelsData()[key]['users'] + ' users'];
 			}
+		}
+		if(id == 1) {
+			activeContent = 'user-analysis.html';
 		}
 	}
 
