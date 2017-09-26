@@ -4,14 +4,14 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 	// move to different controller
     $scope.userAnalysisData = {
-        nodes: new vis.DataSet(),
-        edges: new vis.DataSet()
+        //nodes: new vis.DataSet(),
+        //edges: new vis.DataSet()
     };
     $scope.userAnalysisOptions = {
 
     };
 
-    $scope.userAnalysisData.nodes.add([
+    /*$scope.userAnalysisData.nodes.add([
         {id: 1, label: 'Node 1'},
         {id: 2, label: 'Node 2'},
         {id: 3, label: 'Node 3'},
@@ -19,9 +19,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
         {id: 5, label: 'Node 5'}]);
 
     $scope.userAnalysisData.edges.add([
-        {id: 1, from: 1, to: 2},
-        {id: 2, from: 3, to: 2}
-    ]);
+        {id: 1, from: 1, to: 2, value: 5},
+        {id: 2, from: 3, to: 2, value: 35}
+    ]);*/
 
 	$scope.channelAnalysisData = [];
 	$scope.channelAnalysisLabels = [];
@@ -72,7 +72,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			activeContent = 'channel-analysis.html';
 			if($scope.channelAnalysisData.length == 0 && $scope.channelAnalysisLabels.length == 0 && $scope.channelAnalysisName.length == 0) {
 				$scope.loading(true);
-				SociometricAnalysis.backendGetChannels.get(function(data) {
+				SociometricAnalysis.backendGetChannelAnalysis.get(function(data) {
 					SociometricAnalysis.setChannelsData(data);
 
 					$scope.channelAnalysisLabels = data[key]['x'];
@@ -89,6 +89,16 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		}
 		if(id == 1) {
 			activeContent = 'user-analysis.html';
+			if(angular.equals({}, $scope.userAnalysisData)) {
+				$scope.loading(true);
+				SociometricAnalysis.backendGetUserAnalysis.query(function(data) {
+					console.log(data);
+					$scope.loading(false);
+				})
+			}
+			else {
+				
+			}
 		}
 	}
 

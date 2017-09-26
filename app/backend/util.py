@@ -1,25 +1,33 @@
 import datetime
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 from networkx.algorithms.approximation import clique
+from networkx.readwrite import json_graph
+import calendar
 
 
 def graph_analysis(directed_G, undirected_G, graph_name):
+    graph_stats = {}
     try:
-        print("Graph constructed on day: "+ graph_name)
-        print("Max Clique:")
-        print clique.max_clique(undirected_G)
-        print("Current flow betweenness measurement")
-        print nx.approximate_current_flow_betweenness_centrality(undirected_G)
-        print("Communicability betweenness centrality")
-        print(nx.communicability_betweenness_centrality(undirected_G))
-        print "\n"
+        #print("Graph constructed on day: "+ graph_name)
+        #print("Max Clique:")
+        graph_stats["max_clique"] = json.dumps(list(clique.max_clique(undirected_G)))
+        #print("Current flow betweenness measurement")
+        graph_stats["cfbc"] = json.dumps(nx.approximate_current_flow_betweenness_centrality(undirected_G))
+        #print("Communicability betweenness centrality")
+        graph_stats["cbc"] = json.dumps(nx.communicability_betweenness_centrality(undirected_G))
+        return graph_stats
+        #print "\n"
     except:
-        print "Graph day: "+str(graph_name)+ " is not connected" 
+        #print "Graph day: "+str(graph_name)+ " is not connected" 
+        graph_stats["error"] = "Graph is not connected"
 
 def construct_draw_graphs(days_data):
+    user_analysis_data = []
     for i in xrange(7):
+        temp_data = {"day":calendar.day_name[i]}
         directed_G = nx.DiGraph()
         undirected_G = nx.Graph()
         for user_data in days_data:
@@ -30,8 +38,11 @@ def construct_draw_graphs(days_data):
                 else:
                     undirected_G.add_edge(user_data[0],user_data[1],weight=user_data[i+3])
                     
-        nx.write_graphml(directed_G,"plots/"+str(i)+"_graph.graphml")
-        graph_analysis(directed_G, undirected_G, i)
+        #nx.write_graphml(directed_G,"plots/"+str(i)+"_graph.graphml")
+        temp_data["stats"] = graph_analysis(directed_G, undirected_G, i)
+        temp_data["graph"] = json_graph.node_link_data(directed_G)
+        user_analysis_data.append(temp_data)
+    return user_analysis_data
         
 def plot_series_stats(data, title,y_axis_label, filename):
     plt.style.use('ggplot')
