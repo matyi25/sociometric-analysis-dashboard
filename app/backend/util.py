@@ -25,9 +25,9 @@ def graph_analysis(directed_G, undirected_G, graph_name):
         graph_stats["error"] = "Graph is not connected"
 
 def construct_draw_graphs(days_data):
-    user_analysis_data = []
+    user_analysis_data = {}
     for i in xrange(7):
-        temp_data = {"day":calendar.day_name[i]}
+        temp_data = {}
         directed_G = nx.DiGraph()
         undirected_G = nx.Graph()
         for user_data in days_data:
@@ -41,7 +41,7 @@ def construct_draw_graphs(days_data):
         #nx.write_graphml(directed_G,"plots/"+str(i)+"_graph.graphml")
         temp_data["stats"] = graph_analysis(directed_G, undirected_G, i)
         temp_data["graph"] = json_graph.node_link_data(directed_G)
-        user_analysis_data.append(temp_data)
+        user_analysis_data[calendar.day_name[i]] = temp_data
     return user_analysis_data
         
 def plot_series_stats(data, title,y_axis_label, filename):

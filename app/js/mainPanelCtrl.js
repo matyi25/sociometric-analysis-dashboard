@@ -1,27 +1,20 @@
-sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $rootScope, $mdSidenav, $mdToast, $mdDialog, socialLoginService, SociometricAnalysis) {
+sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $timeout, $rootScope, $mdSidenav, $mdToast, $mdDialog, socialLoginService, SociometricAnalysis) {
+	
+	var daysArray = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 
-	// move to different controller
     $scope.userAnalysisData = {
-        //nodes: new vis.DataSet(),
-        //edges: new vis.DataSet()
+
     };
     $scope.userAnalysisOptions = {
-
+    	edges:{
+		    arrows: {
+		      to:     {enabled: true, scaleFactor:1, type:'arrow'},
+		    },
+		    dashes: true
+		}
     };
-
-    /*$scope.userAnalysisData.nodes.add([
-        {id: 1, label: 'Node 1'},
-        {id: 2, label: 'Node 2'},
-        {id: 3, label: 'Node 3'},
-        {id: 4, label: 'Node 4'},
-        {id: 5, label: 'Node 5'}]);
-
-    $scope.userAnalysisData.edges.add([
-        {id: 1, from: 1, to: 2, value: 5},
-        {id: 2, from: 3, to: 2, value: 35}
-    ]);*/
 
 	$scope.channelAnalysisData = [];
 	$scope.channelAnalysisLabels = [];
@@ -51,7 +44,11 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			logout();
 		}
 		else {
-			activeContent = link+".html";
+			if (link == 'analysis' && activeContent == 'default.html') {
+				activeContent = 'default.html';
+			} else { 
+				activeContent = link+".html";
+			}
 		}
 	}
 
@@ -73,7 +70,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			if($scope.channelAnalysisData.length == 0 && $scope.channelAnalysisLabels.length == 0 && $scope.channelAnalysisName.length == 0) {
 				$scope.loading(true);
 				SociometricAnalysis.backendGetChannelAnalysis.get(function(data) {
-					SociometricAnalysis.setChannelsData(data);
+					SociometricAnalysis.setChannelAnalysisData(data);
 
 					$scope.channelAnalysisLabels = data[key]['x'];
 					$scope.channelAnalysisData = [data[key]['y']];
@@ -82,22 +79,34 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				})
 			}
 			else {
-				$scope.channelAnalysisLabels = SociometricAnalysis.getChannelsData()[key]['x'];
-				$scope.channelAnalysisData = [SociometricAnalysis.getChannelsData()[key]['y']];
-				$scope.channelAnalysisName = [key + " - " + SociometricAnalysis.getChannelsData()[key]['users'] + ' users'];
+				$scope.channelAnalysisLabels = SociometricAnalysis.getChannelAnalysisData()[key]['x'];
+				$scope.channelAnalysisData = [SociometricAnalysis.getChannelAnalysisData()[key]['y']];
+				$scope.channelAnalysisName = [key + " - " + SociometricAnalysis.getChannelAnalysisData()[key]['users'] + ' users'];
 			}
 		}
 		if(id == 1) {
-			activeContent = 'user-analysis.html';
 			if(angular.equals({}, $scope.userAnalysisData)) {
 				$scope.loading(true);
-				SociometricAnalysis.backendGetUserAnalysis.query(function(data) {
-					console.log(data);
+				SociometricAnalysis.backendGetUserAnalysis.get(function(data) {
+				 	SociometricAnalysis.setUserAnalysisData(data);
+
+					$scope.userAnalysisData['nodes'] = new vis.DataSet();
+					$scope.userAnalysisData['nodes'].add(data[key]['graph']['nodes']);
+
+					$scope.userAnalysisData['edges'] = new vis.DataSet();
+					$scope.userAnalysisData['edges'].add(data[key]['graph']['links']);
+					
 					$scope.loading(false);
+					activeContent = 'user-analysis.html';
 				})
 			}
 			else {
-				
+				$scope.userAnalysisData['nodes'] = new vis.DataSet();
+				$scope.userAnalysisData['nodes'].add(SociometricAnalysis.getUserAnalysisData()[key]['graph']['nodes']);
+
+				$scope.userAnalysisData['edges'] = new vis.DataSet();
+				$scope.userAnalysisData['edges'].add(SociometricAnalysis.getUserAnalysisData()[key]['graph']['links']);
+				activeContent = 'user-analysis.html';
 			}
 		}
 	}
@@ -108,6 +117,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		$scope.channelAnalysisData = [];
 		$scope.channelAnalysisLabels = [];
 		$scope.channelAnalysisName = [];
+		$scope.userAnalysisData = {};
+
 
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
@@ -120,11 +131,13 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				headers: {'Content-Type': undefined}
 		}).then(function(result) {
 				$scope.loading(false)
+				SociometricAnalysis.setChannels(result.data.channels);
+				SociometricAnalysis.setUsers(result.data.users);
 				if(result.status == 200) {
 					$scope.data.dataMenu.forEach(function cb(element, index, array) {
 						switch(element.id){
 							case 0: element.actions = result.data.channels; break;
-							case 1: element.actions = result.data.users; break;
+							case 1: element.actions = daysArray; break;
 						}
 					});
 					SociometricAnalysis.setInputDataInfo(result.data);
@@ -169,12 +182,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			icon: 'power_settings_new'
 		}],
 		dataMenu: [{
-			name: 'Channels',
+			name: 'Channel analysis',
 			id: 0,
 			expand: false,
 			actions: undefined
 		  }, {
-			name: 'Users',
+			name: 'User analysis',
 			id: 1,
 			expand: false,
 			actions: undefined

@@ -27,4 +27,23 @@ def user_analysis(im_data_df, users):
     
     #util.test()
     output_data = util.construct_draw_graphs(days_data)
+    for item in output_data:
+        id = 0
+        for edge in output_data[item]['graph']['links']:
+            edge['id'] = id
+            id = id + 1
+
+            edge['from'] = edge['source']
+            del edge['source']
+
+            edge['to'] = edge['target']
+            del edge['target']
+            
+            edge['value'] = edge['weight']
+            del edge['weight']
+
+        for i in xrange(len(output_data[item]['graph']['nodes'])):
+            output_data[item]['graph']['nodes'][i]['label'] = output_data[item]['graph']['nodes'][i]['id']
+            output_data[item]['graph']['nodes'][i]['id'] = i
+
     print(json.dumps(output_data))
