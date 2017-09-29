@@ -9,6 +9,7 @@
 					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 				</md-list-item>
 				<md-list-item ng-show="cliqueExpand" ng-repeat="node in userAnalysisStats.stats.max_clique">
+					<span flex></span>
 					<p class="md-body-2"> {{node}} </p>
 				</md-list-item>
 				<md-divider></md-divider>
@@ -19,6 +20,7 @@
 					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 				</md-list-item>
 				<md-list-item ng-show="cfbcExpand" ng-repeat="(node, val) in userAnalysisStats.stats.cfbc">
+					<span flex></span>
 					<p class="md-body-2"> {{node}} : {{val | number : 2}} </p>
 				</md-list-item>
 				<md-divider></md-divider>
@@ -29,6 +31,7 @@
 					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 				</md-list-item>
 				<md-list-item ng-show="cbcExpand" ng-repeat="(node, val) in userAnalysisStats.stats.cbc">
+					<span flex></span>
 					<p class="md-body-2"> {{node}} : {{val | number : 2}}</p>
 				</md-list-item>
 				<md-divider></md-divider>
