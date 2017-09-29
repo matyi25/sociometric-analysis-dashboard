@@ -1,4 +1,43 @@
-<div id="chartPanel">
-	<vis-network ng-model="userAnalysisData" options="userAnalysisOptions" id="previewNetwork">
-	</vis-network>
+<div class="row">
+	<div class="col-md-2">
+		<md-content flex layout-padding>
+			<h2>{{userAnalysisStats.title}}</h2>
+			<md-list>
+				<md-list-item ng-click="cliqueExpand = !cliqueExpand">
+					<md-subheader class="md-no-sticky">Max clique</md-subheader>
+					<span flex></span>
+					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+				</md-list-item>
+				<md-list-item ng-show="cliqueExpand" ng-repeat="node in userAnalysisStats.stats.max_clique">
+					<p class="md-body-2"> {{node}} </p>
+				</md-list-item>
+				<md-divider></md-divider>
+
+				<md-list-item ng-click="cfbcExpand = !cfbcExpand">
+					<md-subheader class="md-no-sticky">Current flow betweenness centrality</md-subheader>
+					<span flex></span>
+					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+				</md-list-item>
+				<md-list-item ng-show="cfbcExpand" ng-repeat="(node, val) in userAnalysisStats.stats.cfbc">
+					<p class="md-body-2"> {{node}} : {{val | number : 2}} </p>
+				</md-list-item>
+				<md-divider></md-divider>
+
+				<md-list-item ng-click="cbcExpand = !cbcExpand">
+					<md-subheader class="md-no-sticky">Communicatibility betweenness centrality</md-subheader>
+					<span flex></span>
+					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+				</md-list-item>
+				<md-list-item ng-show="cbcExpand" ng-repeat="(node, val) in userAnalysisStats.stats.cbc">
+					<p class="md-body-2"> {{node}} : {{val | number : 2}}</p>
+				</md-list-item>
+				<md-divider></md-divider>
+
+			</md-list>
+		</md-content>
+	</div>
+	<div class="col-md-10" id="chartPanel">
+		<vis-network ng-model="userAnalysisData" options="userAnalysisOptions" id="previewNetwork">
+		</vis-network>
+	</div>
 </div>

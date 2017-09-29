@@ -4,9 +4,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 
-    $scope.userAnalysisData = {
-
-    };
+	$scope.userAnalysisStats = {};
+    $scope.userAnalysisData = {};
     $scope.userAnalysisOptions = {
     	edges:{
 		    arrows: {
@@ -90,6 +89,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				SociometricAnalysis.backendGetUserAnalysis.get(function(data) {
 				 	SociometricAnalysis.setUserAnalysisData(data);
 
+				 	$scope.userAnalysisStats['title'] = key;
+				 	$scope.userAnalysisStats['stats'] = data[key]['stats'];
+
 					$scope.userAnalysisData['nodes'] = new vis.DataSet();
 					$scope.userAnalysisData['nodes'].add(data[key]['graph']['nodes']);
 
@@ -101,6 +103,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				})
 			}
 			else {
+			 	$scope.userAnalysisStats['title'] = key;
+			 	$scope.userAnalysisStats['stats'] = SociometricAnalysis.getUserAnalysisData()[key]['stats'];
+
 				$scope.userAnalysisData['nodes'] = new vis.DataSet();
 				$scope.userAnalysisData['nodes'].add(SociometricAnalysis.getUserAnalysisData()[key]['graph']['nodes']);
 

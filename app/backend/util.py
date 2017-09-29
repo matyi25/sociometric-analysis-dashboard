@@ -13,11 +13,11 @@ def graph_analysis(directed_G, undirected_G, graph_name):
     try:
         #print("Graph constructed on day: "+ graph_name)
         #print("Max Clique:")
-        graph_stats["max_clique"] = json.dumps(list(clique.max_clique(undirected_G)))
+        graph_stats["max_clique"] = list(clique.max_clique(undirected_G))
         #print("Current flow betweenness measurement")
-        graph_stats["cfbc"] = json.dumps(nx.approximate_current_flow_betweenness_centrality(undirected_G))
+        graph_stats["cfbc"] = nx.approximate_current_flow_betweenness_centrality(undirected_G)
         #print("Communicability betweenness centrality")
-        graph_stats["cbc"] = json.dumps(nx.communicability_betweenness_centrality(undirected_G))
+        graph_stats["cbc"] = nx.communicability_betweenness_centrality(undirected_G)
         return graph_stats
         #print "\n"
     except:

@@ -50,8 +50,8 @@ md-whiteframe {
 #chartPanel {
   width: 50%; 
   margin: 0 auto;
-  height:400px !important;
-  width: 800px;
+  height:500px !important;
+  width: 1000px;
 }
 
 #profilePic {
