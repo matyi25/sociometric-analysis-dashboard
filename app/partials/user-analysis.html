@@ -1,5 +1,5 @@
 <div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<md-content flex layout-padding>
 			<h2>{{userAnalysisStats.title}}</h2>
 			<md-list>
@@ -50,7 +50,7 @@
 			</md-list>
 		</md-content>
 	</div>
-	<div class="col-md-8" id="chartPanel">
+	<div class="col-md-9" id="chartPanel">
 		<vis-network ng-model="userAnalysisData" options="userAnalysisOptions" id="userAnalysisNetwork" on-select="onNodeSelect(properties)">
 		</vis-network>
 	</div>
