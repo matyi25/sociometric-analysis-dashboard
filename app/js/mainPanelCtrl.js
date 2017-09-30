@@ -4,6 +4,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 
+	var userAnalysisSelectedData = {};
 	$scope.userAnalysisStats = {};
     $scope.userAnalysisData = {};
     $scope.userAnalysisOptions = {
@@ -171,6 +172,26 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			}
 		);
 	};
+
+	$scope.onNodeSelect = function(properties) {
+		var tempList = [];
+		for (var i = 0; i < properties.edges.length; i++) {
+			var tempEdge = {}
+			tempEdge['from'] = $scope.userAnalysisData['nodes']['_data'][$scope.userAnalysisData['edges']['_data'][i]['from']]['label'];
+			tempEdge['to'] = $scope.userAnalysisData['nodes']['_data'][$scope.userAnalysisData['edges']['_data'][i]['to']]['label'];
+			tempEdge['value'] = $scope.userAnalysisData['edges']['_data'][i]['value'];
+
+			tempList.push(tempEdge);
+		}
+		$timeout(function() {
+			userAnalysisSelectedData = tempList;
+		}, 100);
+    };
+
+    $scope.getUserAnalysisSelectedData = function() {
+    	return userAnalysisSelectedData;
+    }
+
 
 	$scope.data = {
 		mainMenu: [{

@@ -1,12 +1,23 @@
-<div class="row">
-	<div class="col-md-2">
+<div>
+	<div class="col-md-4">
 		<md-content flex layout-padding>
 			<h2>{{userAnalysisStats.title}}</h2>
 			<md-list>
+			<md-list-item ng-click="detailsExpand = !detailsExpand">
+					<md-subheader class="md-no-sticky">Selected node details</md-subheader>
+					<span flex></span>
+					<md-icon class="md-primary md-icon-button">{{detailsExpand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+				</md-list-item>
+				<md-list-item ng-show="detailsExpand" ng-repeat="edge in getUserAnalysisSelectedData()">
+					<span flex></span>
+					<p class="md-body-2"> From: {{edge.from}} To: {{edge.to}} Weight: {{edge.value}}</p>
+				</md-list-item>
+				<md-divider></md-divider>
+
 				<md-list-item ng-click="cliqueExpand = !cliqueExpand">
 					<md-subheader class="md-no-sticky">Max clique</md-subheader>
 					<span flex></span>
-					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+					<md-icon class="md-primary md-icon-button">{{cliqueExpand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 				</md-list-item>
 				<md-list-item ng-show="cliqueExpand" ng-repeat="node in userAnalysisStats.stats.max_clique">
 					<span flex></span>
@@ -17,7 +28,7 @@
 				<md-list-item ng-click="cfbcExpand = !cfbcExpand">
 					<md-subheader class="md-no-sticky">Current flow betweenness centrality</md-subheader>
 					<span flex></span>
-					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+					<md-icon class="md-primary md-icon-button">{{cfbcExpand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 				</md-list-item>
 				<md-list-item ng-show="cfbcExpand" ng-repeat="(node, val) in userAnalysisStats.stats.cfbc">
 					<span flex></span>
@@ -28,7 +39,7 @@
 				<md-list-item ng-click="cbcExpand = !cbcExpand">
 					<md-subheader class="md-no-sticky">Communicatibility betweenness centrality</md-subheader>
 					<span flex></span>
-					<md-icon class="md-primary md-icon-button">{{section.expand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
+					<md-icon class="md-primary md-icon-button">{{cbcExpand ? 'arrow_drop_up' : 'arrow_drop_down'}}</md-icon>
 				</md-list-item>
 				<md-list-item ng-show="cbcExpand" ng-repeat="(node, val) in userAnalysisStats.stats.cbc">
 					<span flex></span>
@@ -39,8 +50,8 @@
 			</md-list>
 		</md-content>
 	</div>
-	<div class="col-md-10" id="chartPanel">
-		<vis-network ng-model="userAnalysisData" options="userAnalysisOptions" id="previewNetwork">
+	<div class="col-md-8" id="chartPanel">
+		<vis-network ng-model="userAnalysisData" options="userAnalysisOptions" id="userAnalysisNetwork" on-select="onNodeSelect(properties)">
 		</vis-network>
 	</div>
 </div>

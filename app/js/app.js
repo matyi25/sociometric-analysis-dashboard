@@ -23,23 +23,20 @@ var sociometricAnalysisApp = angular.module('sociometricAnalysis', ['ngRoute', '
 ]);
 
 sociometricAnalysisApp.directive('visNetwork', function() {
-    return {
-        restrict: 'E',
-        require: '^ngModel',
-        scope: {
-            ngModel: '=',
-            onSelect: '&',
-            options: '='
-        },
-        link: function($scope, $element, $attrs, ngModel) {
-            var network = new vis.Network($element[0], $scope.ngModel, $scope.options || {});
+	return {
+		restrict: 'E',
+		require: '^ngModel',
+		scope: {
+			ngModel: '=',
+			onSelect: '&',
+			options: '='
+		},
+		link: function($scope, $element, $attrs, ngModel) {
+			var network = new vis.Network($element[0], $scope.ngModel, $scope.options || {});
 
-            var onSelect = $scope.onSelect() || function(prop) {};
-            network.on('select', function(properties) {
-                onSelect(properties);
-            });
-
-        }
-
-    }
+            network.on('select', function(params) {
+         		$scope.onSelect({properties: params});
+			});
+		}
+	}
 });
