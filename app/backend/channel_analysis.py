@@ -1,5 +1,5 @@
 import numpy as np
-import json
+import simplejson as json
 import util
 
 DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
@@ -25,7 +25,7 @@ def channel_analysis(im_data_df):
         output_data[channels[i]] = {"x": DAYS, "y": channel_msgs_day[i][1:], "users": users}
         #util.plot_bar(DAY_VAL, DAYS, channel_msgs_day[i][1:], None, channels[i]+" channel messages per day", 
         #          "", "Message count", "plot_"+channels[i]+"_days.png", True, False)
-    print(json.dumps(output_data))
+    print(json.dumps(output_data,ignore_nan=True))
     
     # Channelekbeli uzenetek
     channel_sum_msgs = im_data_df.groupby(['channel'])['channel'].aggregate(np.count_nonzero)

@@ -121,7 +121,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			if(angular.equals({}, $scope.reactionTimeAnalysisData)) {
 				$scope.loading(true);
 				SociometricAnalysis.backendGetReactionTimeAnalysis.get(function(data) {
-				 	SociometricAnalysis.setReactionTimeAnalysis(data);
+				 	SociometricAnalysis.setReactionTimeAnalysisData(data);
 				 	console.log(data);
 				 						
 					$scope.loading(false);

@@ -1,9 +1,10 @@
 import numpy as np
 import util
-import json
+import simplejson as json
 
 TIME_WINDOW = 3600
 users_medians = {}
+rounder = lambda x: float(format(x, '.2f'))
 
 def set_median_dict_values(orig_user, term_user, median):
     global users_medians
@@ -16,8 +17,8 @@ def set_median_dict_values(orig_user, term_user, median):
 def calc_medians(user1, list_react1, user2, list_react2):
     global users_medians
     
-    set_median_dict_values(user1, user2, np.median(list_react1))
-    set_median_dict_values(user2, user1, np.median(list_react2))    
+    set_median_dict_values(user1, user2, float(format(np.median(list_react1), '.2f')))
+    set_median_dict_values(user2, user1, float(format(np.median(list_react2), '.2f')))    
 
 def calc_and_print_react_time_statisctics(list_react_time, user, is_end_of_channel):    
     user_output_data = {}
@@ -25,10 +26,11 @@ def calc_and_print_react_time_statisctics(list_react_time, user, is_end_of_chann
     if len(list_react_time) == 0:
         #print "No reaction time computed"
         return
-    user_output_data["list"] = list_react_time
-    user_output_data["max"] = np.max(list_react_time)
-    user_output_data["min"] =  np.min(list_react_time)
-    user_output_data["median"] = np.median(list_react_time)
+
+    user_output_data["list"] = map(rounder, list_react_time)
+    user_output_data["max"] = float(format(np.max(list_react_time), '.2f'))
+    user_output_data["min"] =  float(format(np.min(list_react_time), '.2f'))
+    user_output_data["median"] = float(format(np.median(list_react_time), '.2f'))
     #print "React times: "+ str(list_react_time)
     #print "Min: "+str(np.min(list_react_time))
     #print "Max: "+str(np.max(list_react_time))
@@ -144,4 +146,4 @@ def reaction_time_analysis(im_data_df):
         #              orig_user+" channel react time medians for users", 
         #              "", "Medians in seconds", "plot_medians_"+orig_user+".png", True, True)
     
-    print(json.dumps(output_data))
+    print(json.dumps(output_data,ignore_nan=True))

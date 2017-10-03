@@ -1,5 +1,5 @@
 import util
-import json
+import simplejson as json
 
 # Egy user mennyit kuldott osszesen es ezek hogy oszlanak el kik kozott, napok szerint is
 def user_analysis(im_data_df, users):
@@ -46,4 +46,4 @@ def user_analysis(im_data_df, users):
             output_data[item]['graph']['nodes'][i]['label'] = output_data[item]['graph']['nodes'][i]['id']
             output_data[item]['graph']['nodes'][i]['id'] = i
 
-    print(json.dumps(output_data))
+    print(json.dumps(output_data,ignore_nan=True))

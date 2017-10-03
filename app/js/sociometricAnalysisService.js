@@ -5,6 +5,7 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 	var inputDataInfo = {};
 	var channelAnalysisData = {};
 	var userAnalysisData = {};
+	var reactionTimeAnalysisData = {};
 	var channels = [];
 	var users = [];
 
@@ -47,6 +48,14 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 
 	this.getUserAnalysisData = function() {
 		return userAnalysisData;
+	}
+
+	this.setReactionTimeAnalysisData = function (data) {
+		reactionTimeAnalysisData = data;
+	}
+
+	this.getReactionTimeAnalysisData = function () {
+		return reactionTimeAnalysisData;
 	}
 
 	this.setChannels = function(data) {

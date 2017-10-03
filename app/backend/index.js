@@ -47,45 +47,45 @@ app.listen(3000, function() {
 
 app.post('/upload/:userId',type,function(req,res){
 	exec(dataCheckerScript, function(error, stdout, stderr) {
-	  	if (!error) {
-	  		res.status(200);
-	  		res.json(JSON.parse(stdout));
-	  	} else {
-	    	res.sendStatus(201);
-	  	}
+		if (!error) {
+			res.status(200);
+			res.json(JSON.parse(stdout));
+		} else {
+			res.sendStatus(201);
+		}
 	});
 });
 
 app.get('/channelAnalysis', function(req,res){
 	exec(analysisScript + "0", function(error, stdout, stderr) {
-	  	if (!error) {
-	  		res.status(200);
-	  		res.json(JSON.parse(stdout));
-	  	} else {
-	    	res.sendStatus(201);
-	  	}
+		if (!error) {
+			res.status(200);
+			res.json(JSON.parse(stdout));
+		} else {
+			res.sendStatus(201);
+		}
 	});
 });
 
 app.get('/userAnalysis', function(req,res){
 	exec(analysisScript + "1", function(error, stdout, stderr) {
-	  	if (!error) {
-	  		res.status(200);
-	  		res.json(JSON.parse(stdout));
-	  	} else {
-	    	res.sendStatus(201);
-	  	}
+		if (!error) {
+			res.status(200);
+			res.json(JSON.parse(stdout));
+		} else {
+			res.sendStatus(201);
+		}
 	});
 });
 
 app.get('/reactionTimeAnalysis', function(req,res){
 	exec(analysisScript + "2", function(error, stdout, stderr) {
-	  	if (!error) {
-	  		res.status(200);
-	  		res.json(JSON.parse(stdout));
-	  	} else {
-	    	res.sendStatus(201);
-	  	}
+		if (!error) {
+			res.status(200);
+			res.json(JSON.parse(stdout));
+		} else {
+			res.sendStatus(201);
+		}
 	});
 });
 
