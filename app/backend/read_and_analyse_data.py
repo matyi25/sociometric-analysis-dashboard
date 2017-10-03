@@ -86,15 +86,15 @@ def read_all_data():
         subdirs.remove(IM_DATA_FILENAME)
     f = open(cur_dir+"\\"+IM_DATA_FILENAME,"w+")
     
-    print "Users: "
+    print("Users: ")
     for dir_name in subdirs:
-        print "   "+dir_name
+        print("   "+dir_name)
         read_user_data(dir_name, cur_dir)
         
     f.write(json.dumps(im_data))
     im_data_df = pandas.DataFrame(im_data,columns=headers)
     
-    print "\n"
+    print("\n")
     return subdirs, im_data_df
 
 def read_stored_df(path):

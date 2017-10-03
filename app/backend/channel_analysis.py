@@ -19,7 +19,7 @@ def channel_analysis(im_data_df):
     
     output_data = {}
     channels = channel_msgs_day.index.tolist()
-    for i in xrange(len(channels)):
+    for i in range(len(channels)):
         temp = channel_users.loc[channels[i]]
         users = [temp["originating"],temp["terminating"]]
         output_data[channels[i]] = {"x": DAYS, "y": channel_msgs_day[i][1:], "users": users}

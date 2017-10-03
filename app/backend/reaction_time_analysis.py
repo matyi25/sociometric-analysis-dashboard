@@ -109,7 +109,7 @@ def channel_reaction_time_analysis(df):
     output_data[user2] = calc_and_print_react_time_statisctics(list_react_time[1], user2, True)
     calc_medians(user1, list_react_time[0], user2, list_react_time[1])
     
-    x_axis_values = [i for i in xrange(len(list_react_time[0]))]
+    x_axis_values = [i for i in range(len(list_react_time[0]))]
     if len(x_axis_values) >= 1:
         pass
         #util.plot_bar(x_axis_values, x_axis_values, list_react_time[0], None,
@@ -117,7 +117,7 @@ def channel_reaction_time_analysis(df):
                       #"Messages originating from user, sum: ["+str(len(list_react_time[0]))+"]", 
                       #"Reaction times in seconds", "plot_react_time_"+user1+"_"+user2+"_"+user1+".png", False, False)
         
-    x_axis_values = [i for i in xrange(len(list_react_time[1]))]
+    x_axis_values = [i for i in range(len(list_react_time[1]))]
     if len(x_axis_values) >= 1:
         pass
         #util.plot_bar(x_axis_values, x_axis_values, list_react_time[1], None,
@@ -138,7 +138,7 @@ def reaction_time_analysis(im_data_df):
     #print "Overall user medians statistics: "+str(users_medians)
     for orig_user in users_medians.keys():
         x_axis_names = list(users_medians[orig_user].keys())
-        x_axis_values = [i for i in xrange(len(x_axis_names))]
+        x_axis_values = [i for i in range(len(x_axis_names))]
         y_axis_values = list(users_medians[orig_user].values())
         output_data["medians"][orig_user] = users_medians[orig_user]
         

@@ -42,7 +42,7 @@ def user_analysis(im_data_df, users):
             edge['value'] = edge['weight']
             del edge['weight']
 
-        for i in xrange(len(output_data[item]['graph']['nodes'])):
+        for i in range(len(output_data[item]['graph']['nodes'])):
             output_data[item]['graph']['nodes'][i]['label'] = output_data[item]['graph']['nodes'][i]['id']
             output_data[item]['graph']['nodes'][i]['id'] = i
 
