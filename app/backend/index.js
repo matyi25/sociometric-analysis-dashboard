@@ -14,8 +14,8 @@ var db;
 
 var UPLOAD_PATH = "\\public\\uploads\\";
 var IM_DATA_FILENAME = "im_data.txt";
-var dataCheckerScript = "python " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME;
-var analysisScript = "python " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME + " ";
+var dataCheckerScript = "python -W ignore " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME;
+var analysisScript = "python -W ignore " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME + " ";
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -69,6 +69,17 @@ app.get('/channelAnalysis', function(req,res){
 
 app.get('/userAnalysis', function(req,res){
 	exec(analysisScript + "1", function(error, stdout, stderr) {
+	  	if (!error) {
+	  		res.status(200);
+	  		res.json(JSON.parse(stdout));
+	  	} else {
+	    	res.sendStatus(201);
+	  	}
+	});
+});
+
+app.get('/reactionTimeAnalysis', function(req,res){
+	exec(analysisScript + "2", function(error, stdout, stderr) {
 	  	if (!error) {
 	  		res.status(200);
 	  		res.json(JSON.parse(stdout));

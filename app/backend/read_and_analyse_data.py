@@ -3,8 +3,7 @@ import sys
 import json
 import pandas
 
-#import reaction_time_analysis
-#import channel_analysis
+import reaction_time_analysis
 import user_analysis
 #import time_series_analysis
 import channel_analysis
@@ -120,7 +119,9 @@ def main(args):
     elif (int(args[2]) == 1):
         users = get_users(im_data_df)
         user_analysis.user_analysis(im_data_df, users)
-    #reaction_time_analysis.reaction_time_analysis(im_data_df)
+    elif (int(args[2]) == 2):
+        reaction_time_analysis.reaction_time_analysis(im_data_df)
+    
     #time_series_analysis.time_series_analysis(im_data_df, channel_sum_msgs)
 
 if __name__ == '__main__':

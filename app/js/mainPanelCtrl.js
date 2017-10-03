@@ -29,6 +29,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
         }
 	};
 
+	$scope.reactionTimeAnalysisData = {};
+
 	var logout = function() {
 		$rootScope.$broadcast("loadingEvent",true);
 		socialLoginService.logout();
@@ -115,6 +117,22 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				activeContent = 'user-analysis.html';
 			}
 		}
+		if(id == 2) {
+			if(angular.equals({}, $scope.reactionTimeAnalysisData)) {
+				$scope.loading(true);
+				SociometricAnalysis.backendGetReactionTimeAnalysis.get(function(data) {
+				 	SociometricAnalysis.setReactionTimeAnalysis(data);
+				 	console.log(data);
+				 						
+					$scope.loading(false);
+					activeContent = 'reaction-time-analysis.html';
+				})
+			}
+			else {
+			 	
+			}
+		}
+
 	}
 
 	$scope.onSubmit = function(files)	{
@@ -144,6 +162,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 						switch(element.id){
 							case 0: element.actions = result.data.channels; break;
 							case 1: element.actions = daysArray; break;
+							case 2: element.actions = result.data.users; break;
 						}
 					});
 					SociometricAnalysis.setInputDataInfo(result.data);
@@ -215,6 +234,11 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		  }, {
 			name: 'User analysis',
 			id: 1,
+			expand: false,
+			actions: undefined
+		}, {
+			name: 'Reaction time analysis',
+			id: 2,
 			expand: false,
 			actions: undefined
 		}],
