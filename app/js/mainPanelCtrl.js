@@ -58,21 +58,25 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		return SociometricAnalysis.getUserInfo();
 	}
 
-	$scope.onMenuClick = function(link) {
+	$scope.onMainMenuClick = function(link) {
 		if(link=='logout') {
 			logout();
 		}
 		else {
-			if (link == 'analysis' && activeContent == 'default.html') {
-				activeContent = 'default.html';
-			} else { 
-				activeContent = link+".html";
-			}
+			activeContent = link+".html";
 		}
 	}
 
-	$scope.toggleSidenav = function(menu) {
-		$mdSidenav(menu).toggle();
+	$scope.onSubMenuClick = function (link) {
+		if (activeContent == 'default.html') {
+			activeContent = 'default.html';
+		} else if (activeContent == 'reaction-time-analysis-drilldown.html') {
+			activeContent = 'reaction-time-analysis.html';
+		} else if (activeContent == 'reaction-time-analysis.html') {
+			activeContent = 'analysis.html';
+		} else {
+			activeContent = 'default.html';
+		}
 	}
 
 	$scope.loading = function (condition) {
@@ -230,9 +234,13 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		}, 100);
     };
 
+    $scope.onChartClick = function(evt) {
+    	console.log(evt);
+    };
+
     $scope.getUserAnalysisSelectedData = function() {
     	return userAnalysisSelectedData;
-    }
+    };
 
 
 	$scope.data = {

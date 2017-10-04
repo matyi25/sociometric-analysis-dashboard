@@ -2,9 +2,6 @@
   <section layout="column" role="main" flex>
     <md-toolbar role="toolbar" class="md-tall md-hue-2" layout-align="center center">
       <div class="md-toolbar-tools" layout layout-padding>
-        <md-button class="md-icon-button" ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-          <md-icon>menu</md-icon>
-        </md-button>
         <img ng-src="{{getUserInfo().imageUrl}}" class="img-responsive img-circle" alt="" id="profilePic">
         <div layout="column">
           <span class="md-body-2">{{getUserInfo().name}}</span>
@@ -18,7 +15,7 @@
           <md-menu-content width=4>
             <md-subheader>Main menu</md-subheader>
             <md-menu-item ng-repeat="action in data.mainMenu">
-              <md-button layout-fill md-ink-ripple ng-click="onMenuClick(action.link)">
+              <md-button layout-fill md-ink-ripple ng-click="onMainMenuClick(action.link)">
                 <md-icon md-menu-align-target>{{action.icon}}</md-icon>
                 {{action.name}}
               </md-button>
@@ -40,7 +37,7 @@
               <md-menu-content width=4>
                 <md-subheader>Analysis menu</md-subheader>
                 <md-menu-item ng-repeat="action in data.analysisMenu">
-                  <md-button layout-fill md-ink-ripple ng-click="onMenuClick(action.link)">
+                  <md-button layout-fill md-ink-ripple ng-click="onSubMenuClick(action.link)">
                     <md-icon md-menu-align-target>{{action.icon}}</md-icon>
                     {{action.name}}
                   </md-button>
