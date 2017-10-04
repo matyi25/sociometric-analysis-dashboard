@@ -140,7 +140,13 @@ def reaction_time_analysis(im_data_df):
         x_axis_names = list(users_medians[orig_user].keys())
         x_axis_values = [i for i in range(len(x_axis_names))]
         y_axis_values = list(users_medians[orig_user].values())
-        output_data["medians"][orig_user] = users_medians[orig_user]
+        x_vals = []
+        y_vals = []
+        for key in users_medians[orig_user]:
+            x_vals.append(key)
+            y_vals.append(users_medians[orig_user][key])
+
+        output_data["medians"][orig_user] = {'x':x_vals,'y':y_vals}
         
         #util.plot_bar(x_axis_values, x_axis_names, y_axis_values, None,
         #              orig_user+" channel react time medians for users", 

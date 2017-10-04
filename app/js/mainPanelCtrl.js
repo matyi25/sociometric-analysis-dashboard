@@ -4,6 +4,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 
+	// --- User Analysis ---
 	var userAnalysisSelectedData = {};
 	$scope.userAnalysisStats = {};
     $scope.userAnalysisData = {};
@@ -16,6 +17,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		}
     };
 
+    // --- Channel Analysis ---
 	$scope.channelAnalysisData = [];
 	$scope.channelAnalysisLabels = [];
 	$scope.channelAnalysisName = [];
@@ -29,7 +31,22 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
         }
 	};
 
-	$scope.reactionTimeAnalysisData = {};
+	// --- Reaction Time Analysis: Users medians ---
+	$scope.reactionTimeMediansActiveUser = undefined
+	$scope.reactionTimeMediansAnalysisData = [];
+	$scope.reactionTimeMediansAnalysisLabels = [];
+	$scope.reactionTimeMediansAnalysisName = [];
+
+	$scope.reactionTimeMediansAnalysisOptions = {
+		legend: {
+			display: true
+		},
+		title: {
+            display: true,
+            text: 'Users reaction time analysis: medians'
+        }
+	};
+
 
 	var logout = function() {
 		$rootScope.$broadcast("loadingEvent",true);
@@ -118,18 +135,24 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			}
 		}
 		if(id == 2) {
-			if(angular.equals({}, $scope.reactionTimeAnalysisData)) {
+			$scope.reactionTimeMediansActiveUser = key;
+			$scope.reactionTimeMediansAnalysisName = [key +  ' user median'];
+			activeContent = 'reaction-time-analysis.html';
+
+			if($scope.reactionTimeMediansAnalysisLabels.length == 0 && $scope.reactionTimeMediansAnalysisData.length == 0 ) {
+				
 				$scope.loading(true);
 				SociometricAnalysis.backendGetReactionTimeAnalysis.get(function(data) {
 				 	SociometricAnalysis.setReactionTimeAnalysisData(data);
-				 	console.log(data);
-				 						
+
+				 	$scope.reactionTimeMediansAnalysisLabels = data['medians'][key]['x'];
+					$scope.reactionTimeMediansAnalysisData = [data['medians'][key]['y']];
 					$scope.loading(false);
-					activeContent = 'reaction-time-analysis.html';
 				})
 			}
 			else {
-			 	
+				$scope.reactionTimeMediansAnalysisLabels = SociometricAnalysis.getReactionTimeAnalysisData()['medians'][key]['x'];
+				$scope.reactionTimeMediansAnalysisData = [SociometricAnalysis.getReactionTimeAnalysisData()['medians'][key]['y']];
 			}
 		}
 
@@ -237,7 +260,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			expand: false,
 			actions: undefined
 		}, {
-			name: 'Reaction time analysis',
+			name: 'Users reaction time analysis',
 			id: 2,
 			expand: false,
 			actions: undefined
