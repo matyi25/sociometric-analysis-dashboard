@@ -47,11 +47,32 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
         }
 	};
 
+	// --- Reaction Time Analysis: channel list ---
+	$scope.reactionTimeUserAnalysisData = [];
+	$scope.reactionTimeUserAnalysisLabels = [];
+	$scope.reactionTimeUserAnalysisName = [];
+
+	$scope.reactionTimeUserAnalysisOptions = {
+		legend: {
+			display: true
+		},
+		title: {
+            display: true,
+            text: 'User reaction time analysis'
+        }
+	};
+
 
 	var logout = function() {
 		$rootScope.$broadcast("loadingEvent",true);
 		socialLoginService.logout();
 		$location.path('/login');
+	}
+
+	var compareKeys = function(a, b) {
+		var aKeys = Object.keys(a).sort();
+		var bKeys = b.sort();
+		return JSON.stringify(aKeys) === JSON.stringify(bKeys);
 	}
 
 	$scope.getUserInfo = function() {
@@ -72,10 +93,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			activeContent = 'default.html';
 		} else if (activeContent == 'reaction-time-analysis-drilldown.html') {
 			activeContent = 'reaction-time-analysis.html';
-		} else if (activeContent == 'reaction-time-analysis.html') {
-			activeContent = 'analysis.html';
 		} else {
-			activeContent = 'default.html';
+			activeContent = 'analysis.html';
 		}
 	}
 
@@ -236,6 +255,19 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
     $scope.onChartClick = function(evt) {
     	console.log(evt);
+    	channelsData = SociometricAnalysis.getReactionTimeAnalysisData()['channels'];
+    	for(var channel in channelsData) {
+    		if(compareKeys(channelsData[channel],[evt[0]["_model"]["label"], $scope.reactionTimeMediansActiveUser])) {
+    			$scope.reactionTimeUserAnalysisLabels = channelsData[channel][$scope.reactionTimeMediansActiveUser]['x'];
+    			$scope.reactionTimeUserAnalysisData = [channelsData[channel][$scope.reactionTimeMediansActiveUser]['y']];
+    			$scope.reactionTimeUserAnalysisName = ['Reaction time with user: ' + evt[0]["_model"]["label"] + ' for: ' + $scope.reactionTimeMediansActiveUser];
+    			
+    			$timeout(function() {
+					activeContent = 'reaction-time-analysis-drilldown.html';
+				}, 100);
+    			break;
+    		}
+    	}
     };
 
     $scope.getUserAnalysisSelectedData = function() {

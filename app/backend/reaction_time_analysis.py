@@ -25,9 +25,11 @@ def calc_and_print_react_time_statisctics(list_react_time, user, is_end_of_chann
     #print "User: "+user
     if len(list_react_time) == 0:
         #print "No reaction time computed"
-        return
+        return user_output_data
 
-    user_output_data["list"] = map(rounder, list_react_time)
+    temp = range(len(list_react_time))
+    user_output_data["y"] = map(rounder, list_react_time)
+    user_output_data["x"] = [ str(x) for x in temp ]
     user_output_data["max"] = float(format(np.max(list_react_time), '.2f'))
     user_output_data["min"] =  float(format(np.min(list_react_time), '.2f'))
     user_output_data["median"] = float(format(np.median(list_react_time), '.2f'))
