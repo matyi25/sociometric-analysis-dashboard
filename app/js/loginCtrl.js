@@ -1,8 +1,9 @@
-sociometricAnalysisApp.controller('LoginCtrl', function ($scope, $rootScope, $timeout, socialLoginService, SociometricAnalysis) {
+sociometricAnalysisApp.controller('LoginCtrl', function ($scope, $rootScope, $timeout, $location, socialLoginService, SociometricAnalysis) {
 	$rootScope.$on('event:social-sign-in-success', function(event, userDetails){
 		 $timeout(function() {
             SociometricAnalysis.setIsLoggedIn(true);
 			SociometricAnalysis.setUserInfo(userDetails);
+			$location.path('/home');
         }, 500);
 	})
 

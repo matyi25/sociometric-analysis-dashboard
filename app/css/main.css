@@ -54,7 +54,21 @@ md-whiteframe {
   width: 1000px;
 }
 
+#startImage {
+  width: 50%; 
+  margin: 0 auto;
+  height:650px !important;
+  width: 1000px;
+}
+
 #profilePic {
   display: inline-block;
   border-radius: 50%;
+  height:75px !important;
+  width: 75px;
+}
+}
+
+#profileInfo {
+  display: inline-block;
 }

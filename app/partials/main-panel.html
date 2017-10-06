@@ -2,12 +2,18 @@
   <section layout="column" role="main" flex>
     <md-toolbar role="toolbar" class="md-tall md-hue-2" layout-align="center center">
       <div class="md-toolbar-tools" layout layout-padding>
-        <img ng-src="{{getUserInfo().imageUrl}}" class="img-responsive img-circle" alt="" id="profilePic">
-        <div layout="column">
-          <span class="md-body-2">{{getUserInfo().name}}</span>
-          <span class="md-caption">{{getUserInfo().email}}</span>
+        <div class="col-md-3" style="display: inline-block">
+          <div id="profileInfo">
+            <img ng-src="{{getUserInfo().imageUrl}}" class="img-responsive img-circle" alt="" id="profilePic">
+            <div layout="column">
+              <span class="md-body-2">{{getUserInfo().name}}</span>
+              <span class="md-caption">{{getUserInfo().email}}</span>
+            </div>
+          </div>
         </div>
-        <span flex></span>
+        <div class="col-md-6" style="text-align: center">
+          <h2>Sociometric analysis dashboard</h2>
+        </div>
         <md-menu md-position-mode="target-right target">
           <md-button class="md-icon-button" aria-label="Main menu" ng-click="$mdMenu.open($event)">
             <md-icon>message</md-icon>
