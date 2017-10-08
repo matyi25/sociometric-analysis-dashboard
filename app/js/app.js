@@ -17,7 +17,7 @@ var sociometricAnalysisApp = angular.module('sociometricAnalysis', ['ngRoute', '
 		$mdThemingProvider.theme('default').primaryPalette('indigo');
 		socialProvider.setGoogleKey("500653865250-h3a2fe2r7nhc3j7hd288516sqvspl8t3.apps.googleusercontent.com");
 		//socialProvider.setLinkedInKey("YOUR LINKEDIN CLIENT ID");
-		//socialProvider.setFbKey({appId: "YOUR FACEBOOK APP ID", apiVersion: "API VERSION"})
+		socialProvider.setFbKey({appId: "1712936775385607", apiVersion: "v2.10"})
 
 	}
 ]);

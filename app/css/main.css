@@ -66,8 +66,8 @@ md-whiteframe {
   margin-right: auto;
   display: block;
   border-radius: 50%;
-  height:100px !important;
-  width: 100px;
+  height:75px !important;
+  width: 75px;
 }
 
 #profileInfo {
