@@ -181,7 +181,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 	}
 
-	$scope.onSubmit = function(files)	{
+	$scope.onSubmit = function(file)	{
 		$scope.loading(true);
 
 		$scope.channelAnalysisData = [];
@@ -191,12 +191,11 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 
 		var formData = new FormData();
-		var uid = SociometricAnalysis.getUserInfo().uid;
 
-		if(!files[0].isRemote){
-			formData.append('files[]', files[0].lfFile);
+		if(!file[0].isRemote){
+			formData.append('file', file[0].lfFile);
 		}
-		$http.post('http://localhost:3000/upload/'+uid, formData, {
+		$http.post('http://localhost:3000/upload/', formData, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 		}).then(function(result) {

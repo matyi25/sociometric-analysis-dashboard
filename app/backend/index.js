@@ -28,10 +28,9 @@ var storage = multer.diskStorage({
 	}
 });
 var upload = multer({ "storage": storage });
-var type = upload.array('files[]');
 
 
-/*MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, database) {
+MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, database) {
 	if (err) return console.log(err);
 	db = database;
 
@@ -39,13 +38,13 @@ var type = upload.array('files[]');
 		console.log("Listening on 3000");
 	})
 });
- */
+ 
 
-app.listen(3000, function() {
+/*app.listen(3000, function() {
 	console.log("Listening on 3000");
-})
+})*/
 
-app.post('/upload/:userId',type,function(req,res){
+app.post('/upload',upload.single('file'),function(req,res){
 	exec(dataCheckerScript, function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
