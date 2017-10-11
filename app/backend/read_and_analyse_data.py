@@ -112,16 +112,19 @@ def main(args):
     #users, im_data_df = read_all_data()
     
     im_data_df = read_stored_df(args[1])
+    command_list = map(int, args[2].strip('[]').split(','))
 
-    if (int(args[2]) == 0):
-        channel_sum_msgs = channel_analysis.channel_analysis(im_data_df)
+    for i in command_list:
+        if (i == 0):
+            channel_sum_msgs = channel_analysis.channel_analysis(im_data_df)    
 
-    elif (int(args[2]) == 1):
-        users = get_users(im_data_df)
-        user_analysis.user_analysis(im_data_df, users)
-    elif (int(args[2]) == 2):
-        reaction_time_analysis.reaction_time_analysis(im_data_df)
-    
+        elif (i == 1):
+            users = get_users(im_data_df)
+            user_analysis.user_analysis(im_data_df, users)
+
+        elif (i == 2):
+            reaction_time_analysis.reaction_time_analysis(im_data_df)
+
     #time_series_analysis.time_series_analysis(im_data_df, channel_sum_msgs)
 
 if __name__ == '__main__':

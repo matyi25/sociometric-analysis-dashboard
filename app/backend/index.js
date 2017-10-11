@@ -53,7 +53,7 @@ app.post('/upload/:userId',upload.single('file'),function(req,res){
 });
 
 app.get('/channelAnalysis/:userId', function(req,res){
-	exec(analysisScript + req.params.userId + ".txt 0", function(error, stdout, stderr) {
+	exec(analysisScript + req.params.userId + ".txt [0]", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -64,7 +64,7 @@ app.get('/channelAnalysis/:userId', function(req,res){
 });
 
 app.get('/userAnalysis/:userId', function(req,res){
-	exec(analysisScript + req.params.userId + ".txt 1", function(error, stdout, stderr) {
+	exec(analysisScript + req.params.userId + ".txt [1]", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -75,7 +75,7 @@ app.get('/userAnalysis/:userId', function(req,res){
 });
 
 app.get('/reactionTimeAnalysis/:userId', function(req,res){
-	exec(analysisScript + req.params.userId + ".txt 2", function(error, stdout, stderr) {
+	exec(analysisScript + req.params.userId + ".txt [2]", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -84,6 +84,24 @@ app.get('/reactionTimeAnalysis/:userId', function(req,res){
 		}
 	});
 });
+
+app.get('/save/:userId', function(req,res){
+	exec(analysisScript + req.params.userId + ".txt [0,1,2]", function(error, stdout, stderr) {
+		if (!error) {
+			var data = {};
+			var rawAnalysisResults = stdout.split(/\r?\n/).slice(0,-1);
+
+			for (var i = 0; i < rawAnalysisResults.length; i++) {
+				data[i] = JSON.parse(rawAnalysisResults[i]);
+			};
+			res.status(200);
+			res.json({"status": "OK"});
+		} else {
+			res.sendStatus(201);
+		}
+	});
+});
+
 
 
 

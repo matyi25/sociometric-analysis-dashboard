@@ -77,6 +77,7 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 	this.backendGetChannelAnalysis = $resource(backendBaseUrl+"channelAnalysis/:userId");
 	this.backendGetUserAnalysis = $resource(backendBaseUrl+"userAnalysis/:userId");
 	this.backendGetReactionTimeAnalysis = $resource(backendBaseUrl+"reactionTimeAnalysis/:userId");
+	this.backendSave = $resource(backendBaseUrl+"save/:userId");
 
 	return this;
 });
