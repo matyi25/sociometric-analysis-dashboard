@@ -13,18 +13,15 @@ app.use(express.static(__dirname + '/upload'));
 var db;
 
 var UPLOAD_PATH = "\\public\\uploads\\";
-var IM_DATA_FILENAME = "im_data.txt";
-var dataCheckerScript = "python -W ignore " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME;
-var analysisScript = "python -W ignore " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH + IM_DATA_FILENAME + " ";
+var dataCheckerScript = "python -W ignore " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH;
+var analysisScript = "python -W ignore " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH;
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, __dirname + UPLOAD_PATH);
-		//modify upload dest
 	},
 	filename: function (req, file, cb) {
-		cb(null, IM_DATA_FILENAME);
-		//modify file name
+		cb(null, file.originalname);
 	}
 });
 var upload = multer({ "storage": storage });
@@ -44,8 +41,8 @@ MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082
 	console.log("Listening on 3000");
 })*/
 
-app.post('/upload',upload.single('file'),function(req,res){
-	exec(dataCheckerScript, function(error, stdout, stderr) {
+app.post('/upload/:userId',upload.single('file'),function(req,res){
+	exec(dataCheckerScript + req.params.userId + ".txt", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -55,8 +52,8 @@ app.post('/upload',upload.single('file'),function(req,res){
 	});
 });
 
-app.get('/channelAnalysis', function(req,res){
-	exec(analysisScript + "0", function(error, stdout, stderr) {
+app.get('/channelAnalysis/:userId', function(req,res){
+	exec(analysisScript + req.params.userId + ".txt 0", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -66,8 +63,8 @@ app.get('/channelAnalysis', function(req,res){
 	});
 });
 
-app.get('/userAnalysis', function(req,res){
-	exec(analysisScript + "1", function(error, stdout, stderr) {
+app.get('/userAnalysis/:userId', function(req,res){
+	exec(analysisScript + req.params.userId + ".txt 1", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -77,8 +74,8 @@ app.get('/userAnalysis', function(req,res){
 	});
 });
 
-app.get('/reactionTimeAnalysis', function(req,res){
-	exec(analysisScript + "2", function(error, stdout, stderr) {
+app.get('/reactionTimeAnalysis/:userId', function(req,res){
+	exec(analysisScript + req.params.userId + ".txt 2", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));

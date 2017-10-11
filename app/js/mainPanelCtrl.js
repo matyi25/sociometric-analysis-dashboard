@@ -107,11 +107,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 
 	$scope.getAnalysis = function(id, key) {
+		var uid = SociometricAnalysis.getUserInfo().uid;
 		if(id == 0) {
 			activeContent = 'channel-analysis.html';
 			if($scope.channelAnalysisData.length == 0 && $scope.channelAnalysisLabels.length == 0 && $scope.channelAnalysisName.length == 0) {
 				$scope.loading(true);
-				SociometricAnalysis.backendGetChannelAnalysis.get(function(data) {
+				SociometricAnalysis.backendGetChannelAnalysis.get({"userId": uid}, function(data) {
 					SociometricAnalysis.setChannelAnalysisData(data);
 
 					$scope.channelAnalysisLabels = data[key]['x'];
@@ -129,7 +130,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		if(id == 1) {
 			if(angular.equals({}, $scope.userAnalysisData)) {
 				$scope.loading(true);
-				SociometricAnalysis.backendGetUserAnalysis.get(function(data) {
+				SociometricAnalysis.backendGetUserAnalysis.get({"userId": uid}, function(data) {
 				 	SociometricAnalysis.setUserAnalysisData(data);
 
 				 	$scope.userAnalysisStats['title'] = key;
@@ -165,7 +166,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			if($scope.reactionTimeMediansAnalysisLabels.length == 0 && $scope.reactionTimeMediansAnalysisData.length == 0 ) {
 				
 				$scope.loading(true);
-				SociometricAnalysis.backendGetReactionTimeAnalysis.get(function(data) {
+				SociometricAnalysis.backendGetReactionTimeAnalysis.get({"userId": uid}, function(data) {
 				 	SociometricAnalysis.setReactionTimeAnalysisData(data);
 
 				 	$scope.reactionTimeMediansAnalysisLabels = data['medians'][key]['x'];
@@ -191,11 +192,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 
 		var formData = new FormData();
+		var uid = SociometricAnalysis.getUserInfo().uid;
 
 		if(!file[0].isRemote){
-			formData.append('file', file[0].lfFile);
+			formData.append('file', file[0].lfFile, uid + '.txt');
 		}
-		$http.post('http://localhost:3000/upload/', formData, {
+		$http.post('http://localhost:3000/upload/' + uid, formData, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 		}).then(function(result) {
