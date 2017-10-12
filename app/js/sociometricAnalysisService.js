@@ -1,13 +1,12 @@
 sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filter, $timeout, $q, $cookieStore) {
 	var isLoggedIn = false;
-	var userInfo = {};
+	var userInfo = undefined;
 	var backendBaseUrl = "http://localhost:3000/";
-	var inputDataInfo = {};
-	var channelAnalysisData = {};
-	var userAnalysisData = {};
-	var reactionTimeAnalysisData = {};
-	var channels = [];
-	var users = [];
+	var channelAnalysisData = undefined;
+	var userAnalysisData = undefined;
+	var reactionTimeAnalysisData = undefined;
+	var channels = undefined;
+	var users = undefined;
 
 
 	this.getIsLoggedIn = function() {
@@ -24,14 +23,6 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 
 	this.setUserInfo = function(data) {
 		userInfo = data;
-	}
-
-	this.getInputDataInfo = function() {
-		return inputDataInfo;
-	}
-
-	this.setInputDataInfo = function(data) {
-		inputDataInfo = data;
 	}
 
 	this.setChannelAnalysisData = function(data) {

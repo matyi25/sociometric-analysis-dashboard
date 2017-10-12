@@ -1,11 +1,15 @@
 sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $location, $timeout, $rootScope, $mdSidenav, $mdToast, $mdDialog, socialLoginService, SociometricAnalysis) {
 	
+	if(!SociometricAnalysis.getIsLoggedIn()) {
+		$location.path("/login");
+	}
+
 	var daysArray = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 	var activeContent = "default.html";
 	var activeChartId = undefined;
 
 	// --- User Analysis ---
-	var userAnalysisSelectedData = {};
+	var userAnalysisSelectedData = [];
 	$scope.userAnalysisStats = {};
     $scope.userAnalysisData = {};
     $scope.userAnalysisOptions = {
@@ -62,7 +66,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
         }
 	};
 
-
 	var logout = function() {
 		$rootScope.$broadcast("loadingEvent",true);
 		socialLoginService.logout();
@@ -99,9 +102,22 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			}
 		} else if (link == 'save') {
 			var uid = SociometricAnalysis.getUserInfo().uid;
-			SociometricAnalysis.backendSave.get({"userId": uid}, function(data) {
-				 console.log(data);
-			});
+
+			if (SociometricAnalysis.getChannels() == undefined || SociometricAnalysis.getUsers() == undefined){
+				$mdDialog.show(
+					$mdDialog.alert()
+						.parent(angular.element(document.querySelector("#general-view")))
+						.clickOutsideToClose(true)
+						.title("ERROR")
+						.textContent("You haven't uploaded a file yet. You can save the process after you have uploaded a file.")
+						.ariaLabel("Alert")
+						.ok("Got it!")
+				);
+			} else {
+				SociometricAnalysis.backendSave.get({"userId": uid}, function(data) {
+
+				});
+			}
 		}
 	}
 
@@ -115,9 +131,10 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 	$scope.getAnalysis = function(id, key) {
 		var uid = SociometricAnalysis.getUserInfo().uid;
+
 		if(id == 0) {
 			activeContent = 'channel-analysis.html';
-			if($scope.channelAnalysisData.length == 0 && $scope.channelAnalysisLabels.length == 0 && $scope.channelAnalysisName.length == 0) {
+			if(SociometricAnalysis.getChannelAnalysisData() == undefined) {
 				$scope.loading(true);
 				SociometricAnalysis.backendGetChannelAnalysis.get({"userId": uid}, function(data) {
 					SociometricAnalysis.setChannelAnalysisData(data);
@@ -135,7 +152,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			}
 		}
 		if(id == 1) {
-			if(angular.equals({}, $scope.userAnalysisData)) {
+			if(SociometricAnalysis.getUserAnalysisData() == undefined) {
 				$scope.loading(true);
 				SociometricAnalysis.backendGetUserAnalysis.get({"userId": uid}, function(data) {
 				 	SociometricAnalysis.setUserAnalysisData(data);
@@ -170,7 +187,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			$scope.reactionTimeMediansAnalysisName = [key +  ' user median'];
 			activeContent = 'reaction-time-analysis.html';
 
-			if($scope.reactionTimeMediansAnalysisLabels.length == 0 && $scope.reactionTimeMediansAnalysisData.length == 0 ) {
+			if(SociometricAnalysis.getReactionTimeAnalysisData() == undefined) {
 				
 				$scope.loading(true);
 				SociometricAnalysis.backendGetReactionTimeAnalysis.get({"userId": uid}, function(data) {
@@ -192,11 +209,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.onSubmit = function(file)	{
 		$scope.loading(true);
 
-		$scope.channelAnalysisData = [];
-		$scope.channelAnalysisLabels = [];
-		$scope.channelAnalysisName = [];
-		$scope.userAnalysisData = {};
-
+		SociometricAnalysis.setChannelAnalysisData(undefined);
+		SociometricAnalysis.setUserAnalysisData(undefined);
+		SociometricAnalysis.setReactionTimeAnalysisData(undefined);
+		SociometricAnalysis.setChannels(undefined);
+		SociometricAnalysis.setUsers(undefined);
+		userAnalysisSelectedData = [];
 
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
@@ -209,9 +227,10 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				headers: {'Content-Type': undefined}
 		}).then(function(result) {
 				$scope.loading(false)
-				SociometricAnalysis.setChannels(result.data.channels);
-				SociometricAnalysis.setUsers(result.data.users);
 				if(result.status == 200) {
+					SociometricAnalysis.setChannels(result.data.channels);
+					SociometricAnalysis.setUsers(result.data.users);
+
 					$scope.data.dataMenu.forEach(function cb(element, index, array) {
 						switch(element.id){
 							case 0: element.actions = result.data.channels; break;
@@ -219,8 +238,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 							case 2: element.actions = result.data.users; break;
 						}
 					});
-					SociometricAnalysis.setInputDataInfo(result.data);
 					activeContent = "analysis.html";
+
 				} else {
 					$mdDialog.show(
 						$mdDialog.alert()
@@ -262,7 +281,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
     };
 
     $scope.onChartClick = function(evt) {
-    	console.log(evt);
     	channelsData = SociometricAnalysis.getReactionTimeAnalysisData()['channels'];
     	for(var channel in channelsData) {
     		if(compareKeys(channelsData[channel],[evt[0]["_model"]["label"], $scope.reactionTimeMediansActiveUser])) {

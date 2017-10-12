@@ -11,7 +11,7 @@ sociometricAnalysisApp.controller('LoginCtrl', function ($scope, $rootScope, $ti
 		if(SociometricAnalysis.getIsLoggedIn()){
 			$rootScope.$broadcast("loadingEvent",false);
         	SociometricAnalysis.setIsLoggedIn(false);
-			SociometricAnalysis.setUserInfo({});	
+			SociometricAnalysis.setUserInfo(undefined);	
         }
 	})
 });
