@@ -43,7 +43,7 @@
               <md-menu-content width=4>
                 <md-subheader>Analysis menu</md-subheader>
                 <md-menu-item ng-repeat="action in data.analysisMenu">
-                  <md-button layout-fill md-ink-ripple ng-click="onSubMenuClick(action.link)">
+                  <md-button layout-fill md-ink-ripple ng-click="onSubMenuClick($event,action.link)">
                     <md-icon md-menu-align-target>{{action.icon}}</md-icon>
                     {{action.name}}
                   </md-button>

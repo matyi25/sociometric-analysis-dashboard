@@ -11,7 +11,9 @@ app.use(cors());
 app.use(express.static(__dirname + '/upload'));
 
 var db;
+var analysisDataDb;
 
+var analysisDataDbName = "analysisDataDb";
 var UPLOAD_PATH = "\\public\\uploads\\";
 var dataCheckerScript = "python -W ignore " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH;
 var analysisScript = "python -W ignore " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH;
@@ -27,20 +29,15 @@ var storage = multer.diskStorage({
 var upload = multer({ "storage": storage });
 
 
-MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, database) {
+MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, db) {
 	if (err) return console.log(err);
-	db = database;
+	analysisDataDb = db.collection(analysisDataDbName)
 
 	app.listen(3000, function() {
 		console.log("Listening on 3000");
 	})
 });
  
-
-/*app.listen(3000, function() {
-	console.log("Listening on 3000");
-})*/
-
 app.post('/upload/:userId',upload.single('file'),function(req,res){
 	exec(dataCheckerScript + req.params.userId + ".txt", function(error, stdout, stderr) {
 		if (!error) {
@@ -85,23 +82,32 @@ app.get('/reactionTimeAnalysis/:userId', function(req,res){
 	});
 });
 
-app.get('/save/:userId', function(req,res){
-	exec(analysisScript + req.params.userId + ".txt [0,1,2]", function(error, stdout, stderr) {
-		if (!error) {
-			var data = {};
-			var rawAnalysisResults = stdout.split(/\r?\n/).slice(0,-1);
+app.post('/save/:userId', function(req,res){
+	analysisDataDb.find({"userId":req.params.userId, "id": req.body.id}).toArray(function(err, docs) {
+		if(docs[0] == undefined) {
+			exec(analysisScript + req.params.userId + ".txt [0,1,2]", function(error, stdout, stderr) {
+				if (!error) {
+					var data = {};
+					var rawAnalysisResults = stdout.split(/\r?\n/).slice(0,-1);
 
-			for (var i = 0; i < rawAnalysisResults.length; i++) {
-				data[i] = JSON.parse(rawAnalysisResults[i]);
-			};
-			res.status(200);
-			res.json({"status": "OK"});
+					for (var i = 0; i < rawAnalysisResults.length; i++) {
+						data[i] = JSON.parse(rawAnalysisResults[i]);
+					};
+
+					analysisDataDb.insert({"userId": req.params.userId,"id":req.body.id, "data": data }, {w:1}, function(err, result) {
+						if(err) res.json({"status": "error"});
+						else if(result.result.ok == 1) {
+							res.status(200);
+							res.json({"status": "OK"});
+						}
+					});
+				} else {
+					res.json({"status": "error"});
+				}
+			});
 		} else {
-			res.sendStatus(201);
+			res.json({"status": "exists"});
 		}
-	});
+	})
+
 });
-
-
-
-

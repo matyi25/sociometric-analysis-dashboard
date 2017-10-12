@@ -11,17 +11,17 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	// --- User Analysis ---
 	var userAnalysisSelectedData = [];
 	$scope.userAnalysisStats = {};
-    $scope.userAnalysisData = {};
-    $scope.userAnalysisOptions = {
-    	edges:{
-		    arrows: {
-		      to:     {enabled: true, scaleFactor:1, type:'arrow'},
-		    },
-		    dashes: true
+	$scope.userAnalysisData = {};
+	$scope.userAnalysisOptions = {
+		edges:{
+			arrows: {
+			  to:     {enabled: true, scaleFactor:1, type:'arrow'},
+			},
+			dashes: true
 		}
-    };
+	};
 
-    // --- Channel Analysis ---
+	// --- Channel Analysis ---
 	$scope.channelAnalysisData = [];
 	$scope.channelAnalysisLabels = [];
 	$scope.channelAnalysisName = [];
@@ -30,9 +30,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			display: true
 		},
 		title: {
-            display: true,
-            text: 'Channel analysis'
-        }
+			display: true,
+			text: 'Channel analysis'
+		}
 	};
 
 	// --- Reaction Time Analysis: Users medians ---
@@ -46,9 +46,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			display: true
 		},
 		title: {
-            display: true,
-            text: 'Users reaction time analysis: medians'
-        }
+			display: true,
+			text: 'Users reaction time analysis: medians'
+		}
 	};
 
 	// --- Reaction Time Analysis: channel list ---
@@ -61,12 +61,13 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			display: true
 		},
 		title: {
-            display: true,
-            text: 'User reaction time analysis'
-        }
+			display: true,
+			text: 'User reaction time analysis'
+		}
 	};
 
 	var logout = function() {
+		clearData();
 		$rootScope.$broadcast("loadingEvent",true);
 		socialLoginService.logout();
 		$location.path('/login');
@@ -91,7 +92,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		}
 	}
 
-	$scope.onSubMenuClick = function (link) {
+	$scope.onSubMenuClick = function (ev, link) {
 		if (link == 'back') {
 			if (activeContent == 'default.html') {
 				activeContent = 'default.html';
@@ -114,8 +115,47 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 						.ok("Got it!")
 				);
 			} else {
-				SociometricAnalysis.backendSave.get({"userId": uid}, function(data) {
+				    var dialog = $mdDialog.prompt()
+				    	.parent(angular.element(document.querySelector("#general-view")))
+				    	.title('Save analysis data')
+				    	.textContent('What is the name you would want to save your data?')
+				    	.placeholder('Data name')
+				    	.ariaLabel('Data name')
+				    	.initialValue('')
+				    	.targetEvent(ev)
+				    	.ok('Save it!')
+				    	.cancel('Cancel');
 
+				$mdDialog.show(dialog)
+					.then(function(id) {
+						$scope.loading(true);
+						SociometricAnalysis.backendSave.save({"userId": uid}, {"id": id} ,function(data) {
+							$scope.loading(false);
+
+							if(data['status'] == 'exists') {
+								$mdDialog.show(
+									$mdDialog.alert()
+										.parent(angular.element(document.querySelector("#general-view")))
+										.clickOutsideToClose(true)
+										.title("ERROR")
+										.textContent("The name for the analysis data already exists in the DB. Please pick a different one.")
+										.ariaLabel("Alert")
+										.ok("Got it!")
+								);
+							} else if (data['status'] == 'error') {
+								$mdDialog.show(
+									$mdDialog.alert()
+										.parent(angular.element(document.querySelector("#general-view")))
+										.clickOutsideToClose(true)
+										.title("ERROR")
+										.textContent("There was an error during the data saving to the database. Please try again later")
+										.ariaLabel("Alert")
+										.ok("Got it!")
+								);
+							}
+						});
+					}, function() {
+					
 				});
 			}
 		}
@@ -155,10 +195,10 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			if(SociometricAnalysis.getUserAnalysisData() == undefined) {
 				$scope.loading(true);
 				SociometricAnalysis.backendGetUserAnalysis.get({"userId": uid}, function(data) {
-				 	SociometricAnalysis.setUserAnalysisData(data);
+					SociometricAnalysis.setUserAnalysisData(data);
 
-				 	$scope.userAnalysisStats['title'] = key;
-				 	$scope.userAnalysisStats['stats'] = data[key]['stats'];
+					$scope.userAnalysisStats['title'] = key;
+					$scope.userAnalysisStats['stats'] = data[key]['stats'];
 
 					$scope.userAnalysisData['nodes'] = new vis.DataSet();
 					$scope.userAnalysisData['nodes'].add(data[key]['graph']['nodes']);
@@ -171,8 +211,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				})
 			}
 			else {
-			 	$scope.userAnalysisStats['title'] = key;
-			 	$scope.userAnalysisStats['stats'] = SociometricAnalysis.getUserAnalysisData()[key]['stats'];
+				$scope.userAnalysisStats['title'] = key;
+				$scope.userAnalysisStats['stats'] = SociometricAnalysis.getUserAnalysisData()[key]['stats'];
 
 				$scope.userAnalysisData['nodes'] = new vis.DataSet();
 				$scope.userAnalysisData['nodes'].add(SociometricAnalysis.getUserAnalysisData()[key]['graph']['nodes']);
@@ -191,9 +231,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				
 				$scope.loading(true);
 				SociometricAnalysis.backendGetReactionTimeAnalysis.get({"userId": uid}, function(data) {
-				 	SociometricAnalysis.setReactionTimeAnalysisData(data);
+					SociometricAnalysis.setReactionTimeAnalysisData(data);
 
-				 	$scope.reactionTimeMediansAnalysisLabels = data['medians'][key]['x'];
+					$scope.reactionTimeMediansAnalysisLabels = data['medians'][key]['x'];
 					$scope.reactionTimeMediansAnalysisData = [data['medians'][key]['y']];
 					$scope.loading(false);
 				})
@@ -206,15 +246,18 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 	}
 
-	$scope.onSubmit = function(file)	{
-		$scope.loading(true);
-
+	var clearData = function() {
 		SociometricAnalysis.setChannelAnalysisData(undefined);
 		SociometricAnalysis.setUserAnalysisData(undefined);
 		SociometricAnalysis.setReactionTimeAnalysisData(undefined);
 		SociometricAnalysis.setChannels(undefined);
 		SociometricAnalysis.setUsers(undefined);
 		userAnalysisSelectedData = [];
+	}
+
+	$scope.onSubmit = function(file)	{
+		$scope.loading(true);
+		clearData();
 
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
@@ -278,27 +321,27 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		$timeout(function() {
 			userAnalysisSelectedData = tempList;
 		}, 100);
-    };
+	};
 
-    $scope.onChartClick = function(evt) {
-    	channelsData = SociometricAnalysis.getReactionTimeAnalysisData()['channels'];
-    	for(var channel in channelsData) {
-    		if(compareKeys(channelsData[channel],[evt[0]["_model"]["label"], $scope.reactionTimeMediansActiveUser])) {
-    			$scope.reactionTimeUserAnalysisLabels = channelsData[channel][$scope.reactionTimeMediansActiveUser]['x'];
-    			$scope.reactionTimeUserAnalysisData = [channelsData[channel][$scope.reactionTimeMediansActiveUser]['y']];
-    			$scope.reactionTimeUserAnalysisName = ['Reaction time with user: ' + evt[0]["_model"]["label"] + ' for: ' + $scope.reactionTimeMediansActiveUser];
-    			
-    			$timeout(function() {
+	$scope.onChartClick = function(evt) {
+		channelsData = SociometricAnalysis.getReactionTimeAnalysisData()['channels'];
+		for(var channel in channelsData) {
+			if(compareKeys(channelsData[channel],[evt[0]["_model"]["label"], $scope.reactionTimeMediansActiveUser])) {
+				$scope.reactionTimeUserAnalysisLabels = channelsData[channel][$scope.reactionTimeMediansActiveUser]['x'];
+				$scope.reactionTimeUserAnalysisData = [channelsData[channel][$scope.reactionTimeMediansActiveUser]['y']];
+				$scope.reactionTimeUserAnalysisName = ['Reaction time with user: ' + evt[0]["_model"]["label"] + ' for: ' + $scope.reactionTimeMediansActiveUser];
+				
+				$timeout(function() {
 					activeContent = 'reaction-time-analysis-drilldown.html';
 				}, 100);
-    			break;
-    		}
-    	}
-    };
+				break;
+			}
+		}
+	};
 
-    $scope.getUserAnalysisSelectedData = function() {
-    	return userAnalysisSelectedData;
-    };
+	$scope.getUserAnalysisSelectedData = function() {
+		return userAnalysisSelectedData;
+	};
 
 
 	$scope.data = {
