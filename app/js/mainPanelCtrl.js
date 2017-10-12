@@ -268,10 +268,10 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.onNodeSelect = function(properties) {
 		var tempList = [];
 		for (var i = 0; i < properties.edges.length; i++) {
-			var tempEdge = {}
-			tempEdge['from'] = $scope.userAnalysisData['nodes']['_data'][$scope.userAnalysisData['edges']['_data'][i]['from']]['label'];
-			tempEdge['to'] = $scope.userAnalysisData['nodes']['_data'][$scope.userAnalysisData['edges']['_data'][i]['to']]['label'];
-			tempEdge['value'] = $scope.userAnalysisData['edges']['_data'][i]['value'];
+			var tempEdge = {};
+			tempEdge['from'] = $scope.userAnalysisData['nodes']['_data'][$scope.userAnalysisData['edges']['_data'][properties.edges[i]]['from']]['label'];
+			tempEdge['to'] = $scope.userAnalysisData['nodes']['_data'][$scope.userAnalysisData['edges']['_data'][properties.edges[i]]['to']]['label'];
+			tempEdge['value'] = $scope.userAnalysisData['edges']['_data'][properties.edges[i]]['value'];
 
 			tempList.push(tempEdge);
 		}

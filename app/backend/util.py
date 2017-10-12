@@ -26,7 +26,7 @@ def graph_analysis(directed_G, undirected_G, graph_name):
 
 def construct_draw_graphs(days_data):
     user_analysis_data = {}
-    for i in xrange(7):
+    for i in range(7):
         temp_data = {}
         directed_G = nx.DiGraph()
         undirected_G = nx.Graph()
