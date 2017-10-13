@@ -15,7 +15,6 @@ var analysisDataDb;
 
 var analysisDataDbName = "analysisDataDb";
 var UPLOAD_PATH = "\\public\\uploads\\";
-var dataCheckerScript = "python -W ignore " + __dirname + "\\check_data.py " + __dirname + UPLOAD_PATH;
 var analysisScript = "python -W ignore " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH;
 
 var storage = multer.diskStorage({
@@ -39,7 +38,7 @@ MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082
 });
  
 app.post('/upload/:userId',upload.single('file'),function(req,res){
-	exec(dataCheckerScript + req.params.userId + ".txt", function(error, stdout, stderr) {
+	exec(analysisScript + req.params.userId + ".txt [3]", function(error, stdout, stderr) {
 		if (!error) {
 			res.status(200);
 			res.json(JSON.parse(stdout));
@@ -85,7 +84,7 @@ app.get('/reactionTimeAnalysis/:userId', function(req,res){
 app.post('/save/:userId', function(req,res){
 	analysisDataDb.find({"userId":req.params.userId, "id": req.body.id}).toArray(function(err, docs) {
 		if(docs[0] == undefined) {
-			exec(analysisScript + req.params.userId + ".txt [0,1,2]", function(error, stdout, stderr) {
+			exec(analysisScript + req.params.userId + ".txt [0,1,2,3]", function(error, stdout, stderr) {
 				if (!error) {
 					var data = {};
 					var rawAnalysisResults = stdout.split(/\r?\n/).slice(0,-1);

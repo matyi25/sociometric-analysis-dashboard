@@ -125,6 +125,12 @@ def main(args):
         elif (i == 2):
             reaction_time_analysis.reaction_time_analysis(im_data_df)
 
+        elif (i == 3):
+            data = {}
+            data["channels"] = get_channels(im_data_df)
+            data["users"] = get_users(im_data_df)
+            print(json.dumps(data))
+
     #time_series_analysis.time_series_analysis(im_data_df, channel_sum_msgs)
 
 if __name__ == '__main__':
