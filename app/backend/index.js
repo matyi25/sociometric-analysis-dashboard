@@ -12,7 +12,6 @@ app.use(express.static(__dirname + '/upload'));
 
 var db;
 var analysisDataDb;
-
 var analysisDataDbName = "analysisDataDb";
 var UPLOAD_PATH = "\\public\\uploads\\";
 var analysisScript = "python -W ignore " + __dirname + "\\read_and_analyse_data.py " + __dirname + UPLOAD_PATH;

@@ -1,4 +1,4 @@
-sociometricAnalysisApp.controller('LoadingCtrl', function ($scope, $rootScope,$mdDialog, $interval, SociometricAnalysis) {
+sociometricAnalysisApp.controller('LoadingCtrl', function ($scope, $rootScope,$mdDialog, SociometricAnalysis) {
 	$rootScope.$on("loadingEvent",function(ev, isOn) {
 		if(isOn) {
 			$mdDialog.show({
