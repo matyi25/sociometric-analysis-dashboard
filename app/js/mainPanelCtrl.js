@@ -108,7 +108,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 
 	$scope.getSavedAnalysisData = function(id) {
+		$scope.loading(true);
 		var uid = SociometricAnalysis.getUserInfo().uid;
+		
 		SociometricAnalysis.backendGetSavedAnalysisData.get({"userId": uid, "id": id},function(data) {
 			var analysisData = data["data"];
 			SociometricAnalysis.setChannels(analysisData[3]["channels"]);
@@ -121,6 +123,41 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 			activeContent = "analysis.html";
 			$scope.loading(false);
+		});
+	}
+
+	$scope.deleteSavedAnalysisData = function(id) {
+		var uid = SociometricAnalysis.getUserInfo().uid;
+
+		var confirmDeletion = $mdDialog.confirm()
+		  .title('Do you really want us to delete your data?')
+		  .textContent('Your data with saved id: '+ id)
+		  .ariaLabel('Data deletion')
+		  .ok('Please do it!')
+		  .cancel('No, thanks');
+
+		$mdDialog.show(confirmDeletion).then(function() {
+			SociometricAnalysis.backendDeleteSavedAnalysisData.delete({"id":id, "userId":uid }, function(data){
+				if(data.resp != "OK") {
+					$mdDialog.show(
+						$mdDialog.alert()
+							.parent(angular.element(document.querySelector('#general-view')))
+							.clickOutsideToClose(true)
+							.title('ERROR WHILE DELETING DATA IN DB')
+							.textContent('The data deleting in the DB was unsuccessful due to an error. Pleas try again.')
+							.ariaLabel('Alert')
+							.ok('Got it!')
+					);
+				} else {
+					var temp = [];
+					for (var i = 0; i < savedAnalysisDataIds.length; i++) {
+						if(savedAnalysisDataIds[i] != id) {
+							temp.push(savedAnalysisDataIds[i]);
+						}
+					}
+					savedAnalysisDataIds = temp;
+				}
+			});
 		});
 	}
 

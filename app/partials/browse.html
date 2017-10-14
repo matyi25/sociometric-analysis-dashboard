@@ -1,9 +1,10 @@
 <md-content flex layout-padding>
 	<md-list>
-		<md-list-item ng-repeat="id in getSavedAnalysisDataIds()" ng-click="getSavedAnalysisData(id)">
-			<md-icon>assessment</md-icon>
+		<md-list-item ng-repeat="id in getSavedAnalysisDataIds()">
+			<md-icon ng-click="getSavedAnalysisData(id)">assessment</md-icon>
 			<md-subheader class="md-no-sticky" ng-click="getSavedAnalysisData(id)">{{id}}</md-subheader>
-			<span flex></span>
+			<span flex ng-click="getSavedAnalysisData(id)"></span>
+			<md-icon ng-click="deleteSavedAnalysisData(id)">delete_forever</md-icon>
 		</md-list-item>
 		<md-divider></md-divider>
 	</md-list>

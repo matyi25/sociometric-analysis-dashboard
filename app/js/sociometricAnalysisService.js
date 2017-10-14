@@ -71,6 +71,7 @@ sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filt
 	this.backendSaveAnalysisData = $resource(backendBaseUrl+"saveAnalysisData/:userId");
 	this.backendGetSavedAnalysisDataIds = $resource(backendBaseUrl+"savedAnalysisDataIds/:userId");
 	this.backendGetSavedAnalysisData = $resource(backendBaseUrl+"savedAnalysisData/:userId/:id");
+	this.backendDeleteSavedAnalysisData = $resource(backendBaseUrl+"deleteSavedAnalysisData/:userId/:id");
 
 	return this;
 });

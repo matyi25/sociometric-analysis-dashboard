@@ -128,3 +128,12 @@ app.get('/savedAnalysisData/:userId/:id', function(req, res) {
 		else res.json(docs[0]);
 	})
 });
+
+app.delete("/deleteSavedAnalysisData/:userId/:id", function(req, res) {
+	analysisDataDb.remove({"userId": req.params.userId,"id":req.params.id}, {w:1}, function(err, result) {
+		if(err) console.log(err);
+		else if(result.result.ok == 1) {
+			res.json({"resp": "OK"});
+		}
+	});
+});
