@@ -81,7 +81,7 @@ app.get('/reactionTimeAnalysis/:userId', function(req,res){
 	});
 });
 
-app.post('/save/:userId', function(req,res){
+app.post('/saveAnalysisData/:userId', function(req,res){
 	analysisDataDb.find({"userId":req.params.userId, "id": req.body.id}).toArray(function(err, docs) {
 		if(docs[0] == undefined) {
 			exec(analysisScript + req.params.userId + ".txt [0,1,2,3]", function(error, stdout, stderr) {
@@ -109,4 +109,22 @@ app.post('/save/:userId', function(req,res){
 		}
 	})
 
+});
+
+app.get('/savedAnalysisDataIds/:userId', function(req, res) {
+	analysisDataDb.find({"userId":req.params.userId}).toArray(function(err, docs) {
+		var dataIds = [];
+
+		for (var i = 0; i < docs.length; i++) {
+			dataIds[i] = docs[i].id;
+		}
+		res.json(dataIds);
+	})
+});
+
+app.get('/savedAnalysisData/:userId/:id', function(req, res) {
+	analysisDataDb.find({"userId":req.params.userId, "id": req.params.id}).toArray(function(err, docs) {
+		if(err) res.json({"status": "error"});
+		else res.json(docs[0]);
+	})
 });

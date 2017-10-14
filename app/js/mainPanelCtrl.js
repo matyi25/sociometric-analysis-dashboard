@@ -4,6 +4,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		$location.path("/login");
 	}
 
+	var newUpload = false;
 	var daysArray = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 	var activeContent = "default.html";
 	var activeChartId = undefined;
@@ -66,6 +67,12 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		}
 	};
 
+	var savedAnalysisDataIds = [];
+
+	$scope.getSavedAnalysisDataIds = function() {
+		return savedAnalysisDataIds;
+	}
+
 	var logout = function() {
 		clearData();
 		$rootScope.$broadcast("loadingEvent",true);
@@ -73,10 +80,48 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		$location.path('/login');
 	}
 
+	var browse = function(link) {
+		var uid = SociometricAnalysis.getUserInfo().uid;
+		$rootScope.$broadcast("loadingEvent",true);
+
+		SociometricAnalysis.backendGetSavedAnalysisDataIds.query({"userId": uid},function(data) {
+			savedAnalysisDataIds = data; 
+			activeContent = link+".html";
+			$scope.loading(false);
+		});
+	}
+
 	var compareKeys = function(a, b) {
 		var aKeys = Object.keys(a).sort();
 		var bKeys = b.sort();
 		return JSON.stringify(aKeys) === JSON.stringify(bKeys);
+	}
+
+	var fillAnalysisMenuActions = function(channels, users) {
+		$scope.data.dataMenu.forEach(function cb(element, index, array) {
+			switch(element.id){
+				case 0: element.actions = channels; break;
+				case 1: element.actions = daysArray; break;
+				case 2: element.actions = users; break;
+			}
+		});
+	}
+
+	$scope.getSavedAnalysisData = function(id) {
+		var uid = SociometricAnalysis.getUserInfo().uid;
+		SociometricAnalysis.backendGetSavedAnalysisData.get({"userId": uid, "id": id},function(data) {
+			var analysisData = data["data"];
+			SociometricAnalysis.setChannels(analysisData[3]["channels"]);
+			SociometricAnalysis.setUsers(analysisData[3]["users"]);
+			fillAnalysisMenuActions(analysisData[3]["channels"],analysisData[3]["users"]);
+
+			SociometricAnalysis.setChannelAnalysisData(analysisData[0]);
+			SociometricAnalysis.setUserAnalysisData(analysisData[1]);
+			SociometricAnalysis.setReactionTimeAnalysisData(analysisData[2]);
+
+			activeContent = "analysis.html";
+			$scope.loading(false);
+		});
 	}
 
 	$scope.getUserInfo = function() {
@@ -86,6 +131,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.onMainMenuClick = function(link) {
 		if(link=='logout') {
 			logout();
+		}
+		else if (link=="browse") {
+			browse(link);
 		}
 		else {
 			activeContent = link+".html";
@@ -104,13 +152,13 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		} else if (link == 'save') {
 			var uid = SociometricAnalysis.getUserInfo().uid;
 
-			if (SociometricAnalysis.getChannels() == undefined || SociometricAnalysis.getUsers() == undefined){
+			if (!newUpload){
 				$mdDialog.show(
 					$mdDialog.alert()
 						.parent(angular.element(document.querySelector("#general-view")))
 						.clickOutsideToClose(true)
 						.title("ERROR")
-						.textContent("You haven't uploaded a file yet. You can save the process after you have uploaded a file.")
+						.textContent("You haven't uploaded a new file yet. You can save the process after you have uploaded a new file. You cannot save already saved data.")
 						.ariaLabel("Alert")
 						.ok("Got it!")
 				);
@@ -129,7 +177,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				$mdDialog.show(dialog)
 					.then(function(id) {
 						$scope.loading(true);
-						SociometricAnalysis.backendSave.save({"userId": uid}, {"id": id} ,function(data) {
+						SociometricAnalysis.backendSaveAnalysisData.save({"userId": uid}, {"id": id} ,function(data) {
 							$scope.loading(false);
 
 							if(data['status'] == 'exists') {
@@ -258,6 +306,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.onSubmit = function(file)	{
 		$scope.loading(true);
 		clearData();
+		newUpload = true;
 
 		var formData = new FormData();
 		var uid = SociometricAnalysis.getUserInfo().uid;
@@ -274,13 +323,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 					SociometricAnalysis.setChannels(result.data.channels);
 					SociometricAnalysis.setUsers(result.data.users);
 
-					$scope.data.dataMenu.forEach(function cb(element, index, array) {
-						switch(element.id){
-							case 0: element.actions = result.data.channels; break;
-							case 1: element.actions = daysArray; break;
-							case 2: element.actions = result.data.users; break;
-						}
-					});
+					fillAnalysisMenuActions(aresult.data.channels,result.data.users);
 					activeContent = "analysis.html";
 
 				} else {
