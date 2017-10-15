@@ -51,6 +51,13 @@ md-whiteframe {
   width: 900px;
 }
 
+#imgPanel {
+  width: 50%; 
+  margin: 0 auto;
+  height:650px !important;
+  width: 1000px;
+}
+
 #startImage {
   width: 50%; 
   margin: 0 auto;
