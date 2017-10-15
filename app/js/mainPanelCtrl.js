@@ -30,10 +30,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.channelAnalysisOptions = {
 		legend: {
 			display: true
-		},
-		title: {
-			display: true,
-			text: 'Channel analysis'
 		}
 	};
 
@@ -46,10 +42,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.reactionTimeMediansAnalysisOptions = {
 		legend: {
 			display: true
-		},
-		title: {
-			display: true,
-			text: 'Users reaction time analysis: medians'
 		}
 	};
 
@@ -61,10 +53,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	$scope.reactionTimeUserAnalysisOptions = {
 		legend: {
 			display: true
-		},
-		title: {
-			display: true,
-			text: 'User reaction time analysis'
 		}
 	};
 
@@ -195,7 +183,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 
 	$scope.onSubMenuClick = function (ev, link) {
 		if (link == 'back') {
-			if (activeContent == 'default.html') {
+			if (activeContent == 'default.html' || activeContent == 'browse.html') {
 				activeContent = 'default.html';
 			} else if (activeContent == 'reaction-time-analysis-drilldown.html') {
 				activeContent = 'reaction-time-analysis.html';

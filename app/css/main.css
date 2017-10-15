@@ -5,6 +5,7 @@ md-progress-circular {
 body {
   overflow-y: scroll;
   background-color: #EEEEEE;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 md-whiteframe {
