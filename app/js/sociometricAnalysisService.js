@@ -1,4 +1,4 @@
-sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filter, $timeout, $q, $cookieStore) {
+sociometricAnalysisApp.factory("SociometricAnalysis", function ($resource, $filter, $timeout) {
 	var isLoggedIn = false;
 	var userInfo = undefined;
 	var backendBaseUrl = "http://localhost:3000/";

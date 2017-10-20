@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static(__dirname + '/upload'));
 
-var db;
 var analysisDataDb;
 var analysisDataDbName = "analysisDataDb";
 var UPLOAD_PATH = "\\public\\uploads\\";
@@ -25,6 +24,70 @@ var storage = multer.diskStorage({
 	}
 });
 var upload = multer({ "storage": storage });
+
+
+/*  Stored data format 
+{ "userId": "115800098440449002581",
+  "id": "proba1",
+  "data": {
+    "0": {
+      "D02CHF8ME": {
+        "x": [],
+        "y": [],
+        "users": []
+      }
+    },
+    "1": {
+      "Monday": {
+        "stats": {
+          "max_clique": [],
+          "cfbc": {},
+          "cbc": {}
+        },
+        "graph": {
+          "directed": true,
+          "multigraph": false,
+          "graph": {
+          },
+          "nodes": [{}],
+          "links": [{}]
+        }
+      }
+    },
+    "2": {
+      "channels": {
+        "D0J5J9USX": {
+          "U02CFSSLZ": {
+            "y": [],
+            "x": [],
+            "max": 1804,
+            "min": 14,
+            "median": 334
+          },
+          "U0HRFC2SU": {
+            "y": [],
+            "x": [],
+            "max": 1793,
+            "min": 7,
+            "median": 22.5
+          }
+        }
+      }
+    },
+    "3": {
+      "channels": [
+        "D02CHF8ME",
+        "D04MK974U"
+      ],
+      "users": [
+        "U04N764E5",
+        "U0HRFC2SU"
+      ]
+    }
+  }
+}
+
+*/
 
 
 MongoClient.connect("mongodb://root:sociometric-analysis@ds151082.mlab.com:51082/sociometric-analysis", function(err, db) {
