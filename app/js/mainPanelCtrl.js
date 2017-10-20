@@ -351,7 +351,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 					SociometricAnalysis.setChannels(result.data.channels);
 					SociometricAnalysis.setUsers(result.data.users);
 
-					fillAnalysisMenuActions(aresult.data.channels,result.data.users);
+					fillAnalysisMenuActions(result.data.channels,result.data.users);
 					activeContent = "analysis.html";
 
 				} else {
