@@ -31,12 +31,15 @@ sociometricAnalysisApp.directive('visNetwork', function() {
 			onSelect: '&',
 			options: '='
 		},
-		link: function($scope, $element, $attrs, ngModel) {
-			var network = new vis.Network($element[0], $scope.ngModel, $scope.options || {});
+		link: function(scope, element, attrs) {
+			var network = new vis.Network(element[0], scope.ngModel, scope.options || {});
 
             network.on('select', function(params) {
-         		$scope.onSelect({properties: params});
+         		scope.onSelect({properties: params});
 			});
+			scope.$watch('ngModel',function(newValue) {
+				network.setData(newValue);
+    		});
 		}
 	}
 });

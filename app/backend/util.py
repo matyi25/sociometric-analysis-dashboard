@@ -3,7 +3,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
-from networkx.algorithms.approximation import clique
+from networkx.algorithms.clique import find_cliques
 from networkx.readwrite import json_graph
 import calendar
 
@@ -13,11 +13,12 @@ def graph_analysis(directed_G, undirected_G, graph_name):
     try:
         #print("Graph constructed on day: "+ graph_name)
         #print("Max Clique:")
-        graph_stats["max_clique"] = list(clique.max_clique(undirected_G))
+        _, max_clique = max(enumerate(find_cliques(undirected_G)), key = lambda tup: len(tup[1]))
+        graph_stats["max_clique"] = list(max_clique)
         #print("Current flow betweenness measurement")
         graph_stats["cfbc"] = nx.approximate_current_flow_betweenness_centrality(undirected_G)
         #print("Communicability betweenness centrality")
-        graph_stats["cbc"] = nx.communicability_betweenness_centrality(undirected_G)
+        graph_stats["cbc"] = nx.betweenness_centrality(undirected_G)
         return graph_stats
         #print "\n"
     except:

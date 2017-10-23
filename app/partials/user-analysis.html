@@ -53,8 +53,11 @@
 			</md-list>
 		</md-content>
 	</div>
-	<div class="col-md-9" id="chartPanel">
+	<div class="col-md-7" id="chartPanel">
 		<vis-network ng-model="userAnalysisData" options="userAnalysisOptions" id="userAnalysisNetwork" on-select="onNodeSelect(properties)">
 		</vis-network>
+	</div>
+	<div class="col-md-2">
+		<md-switch md-invert ng-model="isShowMaxClique" ng-change="showMaxClique(isShowMaxClique)" aria-label="Switch 1"><h4>Show max clique</h4></md-switch>
 	</div>
 </div>

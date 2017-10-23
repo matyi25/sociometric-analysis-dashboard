@@ -11,6 +11,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var activeChartId = undefined;
 
 	// --- User Analysis ---
+	var userAnalysisActiveChartId = undefined;
 	var userAnalysisSelectedData = [];
 	$scope.userAnalysisStats = {};
 	$scope.userAnalysisData = {};
@@ -97,6 +98,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 		SociometricAnalysis.setChannels(undefined);
 		SociometricAnalysis.setUsers(undefined);
 		userAnalysisSelectedData = [];
+		userAnalysisActiveChartId = undefined;
 	}
 
 	$scope.getSavedAnalysisDataIds = function() {
@@ -182,6 +184,8 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 
 	$scope.onSubMenuClick = function (ev, link) {
+		userAnalysisSelectedData = [];
+		
 		if (link == 'back') {
 			if (activeContent == 'default.html' || activeContent == 'browse.html') {
 				activeContent = 'default.html';
@@ -277,6 +281,7 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			}
 		}
 		if(id == 1) {
+			userAnalysisActiveChartId = key;
 			if(SociometricAnalysis.getUserAnalysisData() == undefined) {
 				$scope.loading(true);
 				SociometricAnalysis.backendGetUserAnalysis.get({"userId": uid}, function(data) {
@@ -378,6 +383,41 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 			}
 		);
 	};
+
+	$scope.showMaxClique = function(isShowMaxClique) {
+		var storedNodes = SociometricAnalysis.getUserAnalysisData()[userAnalysisActiveChartId]['graph']['nodes'];
+		var storedLinks = SociometricAnalysis.getUserAnalysisData()[userAnalysisActiveChartId]['graph']['links'];
+
+		if(isShowMaxClique) {
+			var cliqueNodes = [];
+			var cliqueLinks = [];
+			var cliqueNodesIds = [];
+			for (var i = 0; i < storedNodes.length; i++) {
+				if($scope.userAnalysisStats['stats']['max_clique'].includes(storedNodes[i]['label'])) {
+					cliqueNodes.push(storedNodes[i]);
+					cliqueNodesIds.push(storedNodes[i]['id']);
+				}
+			}
+			for (var i = 0; i < storedLinks.length; i++) {
+				if(cliqueNodesIds.includes(storedLinks[i]['to']) && cliqueNodesIds.includes(storedLinks[i]['from'])) {
+					cliqueLinks.push(storedLinks[i]);
+				} 
+			}
+			$scope.userAnalysisData = {};
+			$scope.userAnalysisData['nodes'] = new vis.DataSet();
+			$scope.userAnalysisData['nodes'].add(cliqueNodes);
+
+			$scope.userAnalysisData['edges'] = new vis.DataSet();
+			$scope.userAnalysisData['edges'].add(cliqueLinks);
+		} else {
+			$scope.userAnalysisData = {};
+			$scope.userAnalysisData['nodes'] = new vis.DataSet();
+			$scope.userAnalysisData['nodes'].add(storedNodes);
+
+			$scope.userAnalysisData['edges'] = new vis.DataSet();
+			$scope.userAnalysisData['edges'].add(storedLinks);
+		}
+	}
 
 	$scope.onNodeSelect = function(properties) {
 		var tempList = [];
