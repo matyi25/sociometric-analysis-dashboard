@@ -184,8 +184,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	}
 
 	$scope.onSubMenuClick = function (ev, link) {
-		userAnalysisSelectedData = [];
-		
 		if (link == 'back') {
 			if (activeContent == 'default.html' || activeContent == 'browse.html') {
 				activeContent = 'default.html';
@@ -193,6 +191,9 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 				activeContent = 'reaction-time-analysis.html';
 			} else {
 				activeContent = 'analysis.html';
+				$timeout(function() {
+					userAnalysisSelectedData = [];
+				}, 100);
 			}
 		} else if (link == 'save') {
 			var uid = SociometricAnalysis.getUserInfo().uid;
