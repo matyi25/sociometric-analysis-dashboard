@@ -8,7 +8,6 @@ sociometricAnalysisApp.controller('MainPanelCtrl', function($scope, $http, $loca
 	var savedAnalysisDataIds = [];
 	var daysArray = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 	var activeContent = "default.html";
-	var activeChartId = undefined;
 
 	// --- User Analysis ---
 	var userAnalysisActiveChartId = undefined;
